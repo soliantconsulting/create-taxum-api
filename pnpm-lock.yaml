@@ -15,8 +15,8 @@ importers:
         specifier: ^3.872.0
         version: 3.872.0
       '@listr2/prompt-adapter-enquirer':
-        specifier: ^3.0.2
-        version: 3.0.2(enquirer@2.4.1)(listr2@9.0.2)
+        specifier: ^2.0.16
+        version: 2.0.16(enquirer@2.4.1)
       '@soliantconsulting/starter-lib':
         specifier: ^1.2.5
         version: 1.2.5(@aws-cdk/cli-plugin-contract@2.181.1)(aws-cdk-lib@2.188.0(constructs@10.4.2))
@@ -24,8 +24,8 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1
       listr2:
-        specifier: ^9.0.2
-        version: 9.0.2
+        specifier: ^8.3.3
+        version: 8.3.3
     devDependencies:
       '@biomejs/biome':
         specifier: 2.2.0
@@ -670,13 +670,6 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       enquirer: '>= 2.3.0 < 3'
-
-  '@listr2/prompt-adapter-enquirer@3.0.2':
-    resolution: {integrity: sha512-F5ZTyfoQIrnv0MCJ9/xjkI71HXCdliST5kY+Y+yGlRK2CtHBPw82KXCBg4yhMl0RhUdPu64xXG5YwEUo3b1K/w==}
-    engines: {node: '>=20.0.0'}
-    peerDependencies:
-      enquirer: '>= 2.3.0 < 3'
-      listr2: 9.0.2
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -1709,10 +1702,6 @@ packages:
   listr2@8.3.3:
     resolution: {integrity: sha512-LWzX2KsqcB1wqQ4AHgYb4RsDXauQiqhjLk+6hjbaeHG4zpjjVAB6wC/gz6X0l+Du1cN3pUB5ZlrvTbhGSNnUQQ==}
     engines: {node: '>=18.0.0'}
-
-  listr2@9.0.2:
-    resolution: {integrity: sha512-VVd7cS6W+vLJu2wmq4QmfVj14Iep7cz4r/OWNk36Aq5ZOY7G8/BfCrQFexcwB1OIxB3yERiePfE/REBjEFulag==}
-    engines: {node: '>=20.0.0'}
 
   locate-path@7.2.0:
     resolution: {integrity: sha512-gvVijfZvn7R+2qyPX8mAuKcFGDf6Nc61GdvGafQsHL0sBIxfKzA+usWn4GFC/bk+QdwPUD4kWFJLhElipq+0VA==}
@@ -4013,11 +4002,6 @@ snapshots:
     dependencies:
       enquirer: 2.4.1
 
-  '@listr2/prompt-adapter-enquirer@3.0.2(enquirer@2.4.1)(listr2@9.0.2)':
-    dependencies:
-      enquirer: 2.4.1
-      listr2: 9.0.2
-
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
@@ -5194,15 +5178,6 @@ snapshots:
       commander: 10.0.1
 
   listr2@8.3.3:
-    dependencies:
-      cli-truncate: 4.0.0
-      colorette: 2.0.20
-      eventemitter3: 5.0.1
-      log-update: 6.1.0
-      rfdc: 1.4.1
-      wrap-ansi: 9.0.0
-
-  listr2@9.0.2:
     dependencies:
       cli-truncate: 4.0.0
       colorette: 2.0.20
