@@ -1,0 +1,105 @@
+import "@jsonapi-serde/integration-taxum/augment";
+import assert from "node:assert";
+import {
+    jsonApiErrorHandler,
+    jsonApiMediaTypesLayer,
+    methodNotAllowedHandler,
+    notFoundHandler,
+} from "@jsonapi-serde/integration-taxum";
+{% if features contains "postgres" -%}
+import { RequestContext } from "@mikro-orm/core";
+{%- endif %}
+import { type HttpRequest, jsonResponse } from "@taxum/core/http";
+import { setLoggerProxy } from "@taxum/core/logging";
+import { ServiceBuilder } from "@taxum/core/middleware/builder";
+import { CorsLayer } from "@taxum/core/middleware/cors";
+import { REQUEST_ID } from "@taxum/core/middleware/request-id";
+import { m, Router } from "@taxum/core/routing";
+import { serve } from "@taxum/core/server";
+import type { HttpService } from "@taxum/core/service";
+{%- if features contains "app-config" %}
+import { appConfigHandler } from "@{{project.name}}/app-config";
+{%- endif %}
+import { registerRoutes } from "./route/index.js";
+import { logger } from "./util/logger.js";
+{% if features contains "postgres" -%}
+import { em, orm } from "./util/mikro-orm.js";
+{%- endif %}
+{%- if features contains "app-config" %}
+
+const appConfigStartResult = await appConfigHandler.start();
+
+if (appConfigStartResult.error) {
+    throw appConfigStartResult.error;
+}
+{%- endif %}
+
+setLoggerProxy({
+    fatal: (message, values) => logger.fatal(message, values),
+    error: (message, values) => logger.error(message, values),
+    warn: (message, values) => logger.warn(message, values),
+    info: (message, values) => logger.info(message, values),
+    debug: (message, values) => logger.debug(message, values),
+    trace: (message, values) => logger.debug(message, values),
+});
+
+const router = new Router();
+registerRoutes(router);
+
+router
+    .errorHandler(
+        jsonApiErrorHandler({
+            logError: (error, exposed) => {
+                if (!exposed) {
+                    logger.error("Failed to serve request", { error });
+                }
+            },
+        }),
+    )
+    .fallback(notFoundHandler)
+    .methodNotAllowedFallback(methodNotAllowedHandler)
+    .layer(
+        ServiceBuilder.create()
+            .compression()
+            .insertResponseHeaderIfNotPresent(
+                "Cache-Control",
+                "no-store, no-cache, private, max-age=0",
+            )
+            .withLayer(jsonApiMediaTypesLayer)
+            .setRequestId()
+            .propagateRequestId()
+            .fromFn((req: HttpRequest, next: HttpService) => {
+                const requestId = req.extensions.get(REQUEST_ID);
+                assert(requestId);
+
+                return logger.withContext({ requestId }, async () => await next.invoke(req));
+            })
+            .withLayer(CorsLayer.veryPermissive().maxAge(86400))
+            {% if features contains "postgres" -%}
+            .fromFn((req: HttpRequest, next: HttpService) => {
+                return RequestContext.create(em, async () => await next.invoke(req));
+            }),
+            {%- endif %}
+    )
+    .route(
+        "/health",
+        m.get(() => jsonResponse({ status: "alive" })),
+    );
+
+const port = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 3000;
+
+await serve(router, {
+    port,
+    catchCtrlC: true,
+    shutdownTimeout: 5000,
+    onListen: (address) => {
+        logger.info(`Server started on port ${address.port}`);
+    },
+});
+
+{%- if features contains "app-config" %}
+appConfigHandler.stop();
+{%- endif %}
+{%- if features contains "postgres" %}
+await orm.close();
+{%- endif %}

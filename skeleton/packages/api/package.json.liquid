@@ -1,0 +1,45 @@
+{
+    "name": "@{{project.name}}/api",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "devDependencies": {
+        "@tsconfig/node22": "^22.0.1",
+        "@types/node": "^24.3.0"
+        {%- if features contains "postgres" %},
+        "@mikro-orm/cli": "^6.4.11",
+        "sql-formatter": "^15.0.0"
+        {%- endif %}
+    },
+    "dependencies": {
+        {%- if features contains "app-config" %}
+        "@{{project.name}}/app-config": "workspace:*",
+        {%- endif %}
+        "dotenv": "^16.4.7",
+        "logforth": "^1.2.2",
+        "zod": "^4.0.17",
+        "@jsonapi-serde/integration-taxum": "^1.0.1",
+        "@jsonapi-serde/server": "^1.2.0",
+        "@taxum/core": "^0.9.0"
+        {%- if features contains "postgres" %},
+        "@aws-sdk/client-secrets-manager": "^3.777.0",
+        "@mikro-orm/core": "^6.4.11",
+        "@mikro-orm/postgresql": "^6.4.11",
+        "@mikro-orm/migrations": "^6.4.11",
+        "@sindresorhus/fnv1a": "^3.1.0"
+        {%- endif %}
+    },
+    "scripts": {
+        "start": "tsx watch -C development --import=./src/register-crash-logger.ts ./src/index.ts",
+        "typecheck": "tsc --noEmit",
+        "build": "tsc"
+        {%- if features contains "postgres" %},
+        "mikro-orm": "tsx ./node_modules/@mikro-orm/cli/esm"
+        {%- endif %}
+    }
+    {%- if features contains "postgres" %},
+    "mikro-orm": {
+        "configPaths": ["./src/mikro-orm.config.ts", "./mikro-orm.config.js"]
+    }
+    {%- endif %}
+}

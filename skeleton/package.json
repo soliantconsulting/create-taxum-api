@@ -1,0 +1,21 @@
+{
+    "name": "root",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "devDependencies": {
+        "@biomejs/biome": "2.2.0",
+        "@commitlint/cli": "^19.8.1",
+        "@commitlint/config-conventional": "^19.8.1",
+        "esbuild": "^0.25.9",
+        "lefthook": "^1.12.3",
+        "tsx": "^4.20.4",
+        "typescript": "^5.9.2"
+    },
+    "scripts": {
+        "start": "pnpm --filter api start",
+        "typecheck": "pnpm --parallel typecheck",
+        "format": "biome format . --write",
+        "check": "biome check . --write"
+    }
+}
