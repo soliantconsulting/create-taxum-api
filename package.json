@@ -1,7 +1,7 @@
 {
-  "name": "@soliantconsulting/create-koa-api",
-  "version": "2.19.0",
-  "description": "Create a Koa API",
+  "name": "@soliantconsulting/create-taxum-api",
+  "version": "1.0.0",
+  "description": "Create a Taxum API",
   "type": "module",
   "author": "Soliant Consulting",
   "license": "MIT",
