@@ -1,6 +1,6 @@
 {
   "name": "@soliantconsulting/create-taxum-api",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Create a Taxum API",
   "type": "module",
   "author": "Soliant Consulting",

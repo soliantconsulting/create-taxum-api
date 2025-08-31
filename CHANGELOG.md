@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.0...v1.1.1) (2025-08-31)
+
+
+### Bug Fixes
+
+* **skeleton:** update readme ([0f548c4](https://github.com/soliantconsulting/create-taxum-api/commit/0f548c4349695ded279797164e0d1442feafab41))
+
 # [1.1.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.0.0...v1.1.0) (2025-08-31)
 
 
