@@ -10,7 +10,6 @@
         "esbuild": "^0.25.9",
         "lefthook": "^1.12.3",
         "tsx": "^4.20.4",
-        "temporal-polyfill": "^0.3.0",
         "typescript": "^5.9.2"
     },
     "scripts": {
