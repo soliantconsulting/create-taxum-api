@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.1...v1.1.2) (2025-08-31)
+
+
+### Bug Fixes
+
+* **skeleton:** add missing temporal-polyfill ([16fd820](https://github.com/soliantconsulting/create-taxum-api/commit/16fd820162ca80e6fd1f60ab8ac190a38a462afe))
+
 ## [1.1.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.0...v1.1.1) (2025-08-31)
 
 
