@@ -2,7 +2,7 @@
     "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
     "assist": { "actions": { "source": { "organizeImports": "on" } } },
     "files": {
-        "includes": ["./biome.json", "./commitlint.config.cjs", "**/src/**/*"]
+        "includes": ["biome.json", "commitlint.config.cjs", "src/**/*", "skeleton/**/*"]
     },
     "linter": {
         "enabled": true,
@@ -17,7 +17,13 @@
                 "noUnusedPrivateClassMembers": "error",
                 "useHookAtTopLevel": "error",
                 "noInvalidBuiltinInstantiation": "error",
-                "noSwitchDeclarations": "error"
+                "noSwitchDeclarations": "error",
+                "noUnusedVariables": {
+                    "level": "error",
+                    "options": {
+                        "ignoreRestSiblings": true
+                    }
+                }
             },
             "style": {
                 "useBlockStatements": "error",

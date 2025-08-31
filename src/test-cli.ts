@@ -21,7 +21,7 @@ type BaseContext = ProjectContext &
     ZoomErrorNotificationsContext;
 
 await runPipeline({
-    packageName: "@soliantconsulting/create-koa-api",
+    packageName: "@soliantconsulting/create-taxum-api",
     tasks: [createPnpmVersionTask("10.0.0"), synthTask],
     baseContext: {
         project: {

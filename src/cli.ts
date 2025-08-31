@@ -15,9 +15,9 @@ import { synthTask } from "./tasks/synth.js";
 import { zoomErrorNotificationsTask } from "./tasks/zoom-error-notifications.js";
 
 await runPipeline({
-    packageName: "@soliantconsulting/create-koa-api",
+    packageName: "@soliantconsulting/create-taxum-api",
     tasks: [
-        createPnpmVersionTask("10.7.0"),
+        createPnpmVersionTask("10.15.0"),
         createProjectTask(),
         createAwsEnvTask(),
         createBitbucketRepositoryTask(),
