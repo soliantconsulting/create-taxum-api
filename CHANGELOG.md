@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.2...v1.1.3) (2025-08-31)
+
+
+### Bug Fixes
+
+* remove polyfill from root ([22405a9](https://github.com/soliantconsulting/create-taxum-api/commit/22405a92897941fad63bb42b006cab0df2b22f2b))
+
 ## [1.1.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.1...v1.1.2) (2025-08-31)
 
 
