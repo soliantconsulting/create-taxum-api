@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.0.0...v1.1.0) (2025-08-31)
+
+
+### Features
+
+* use temporal and node 24 ([2ada8c8](https://github.com/soliantconsulting/create-taxum-api/commit/2ada8c8f10716259e304a260c748907f3e7a54e3))
+
 # 1.0.0 (2025-08-21)
 
 
