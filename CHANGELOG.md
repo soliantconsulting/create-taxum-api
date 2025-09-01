@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.3...v1.1.4) (2025-09-01)
+
+
+### Bug Fixes
+
+* add yml to editorconfig ([552ad64](https://github.com/soliantconsulting/create-taxum-api/commit/552ad640328defaeb3ad5f7762925daf4011c701))
+
 ## [1.1.3](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.2...v1.1.3) (2025-08-31)
 
 
