@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.4...v1.1.5) (2025-09-10)
+
+
+### Bug Fixes
+
+* **skeleton:** make postgres-related cdk imports conditional ([857ab0f](https://github.com/soliantconsulting/create-taxum-api/commit/857ab0fed8871dbd074e342be6b764059bf29688))
+
 ## [1.1.4](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.3...v1.1.4) (2025-09-01)
 
 
