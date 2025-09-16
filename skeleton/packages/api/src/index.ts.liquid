@@ -104,3 +104,4 @@ appConfigHandler.stop();
 {%- if features contains "postgres" %}
 await orm.close();
 {%- endif %}
+process.exit(0);
