@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.2.0...v1.2.1) (2025-09-16)
+
+
+### Bug Fixes
+
+* **skeleton:** exit cleanly after shutdown ([1e6db34](https://github.com/soliantconsulting/create-taxum-api/commit/1e6db34291b2c6f05d65467af6e62b53d3a0abd8))
+
 # [1.2.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.1.5...v1.2.0) (2025-09-13)
 
 
