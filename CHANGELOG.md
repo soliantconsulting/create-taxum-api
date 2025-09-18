@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.2.1...v1.2.2) (2025-09-18)
+
+
+### Bug Fixes
+
+* **skeleton:** load temporal polyfill through import statement ([0807aac](https://github.com/soliantconsulting/create-taxum-api/commit/0807aac9d1b2f2490c5963a30e06796bb45f818f))
+
 ## [1.2.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.2.0...v1.2.1) (2025-09-16)
 
 
