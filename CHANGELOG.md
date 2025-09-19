@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.2.2...v1.3.0) (2025-09-19)
+
+
+### Features
+
+* **skeleton:** quiet dotenv ([edb70e7](https://github.com/soliantconsulting/create-taxum-api/commit/edb70e7648e25918512a63f50c97ae2bea3950ba))
+
 ## [1.2.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.2.1...v1.2.2) (2025-09-18)
 
 
