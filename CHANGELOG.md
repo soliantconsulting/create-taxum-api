@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.3.0...v1.3.1) (2025-09-30)
+
+
+### Bug Fixes
+
+* **skeleton:** align zod version between packages ([e2646e1](https://github.com/soliantconsulting/create-taxum-api/commit/e2646e16ac6823f59e1aa5584c5ca9857839a07b))
+
 # [1.3.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.2.2...v1.3.0) (2025-09-19)
 
 
