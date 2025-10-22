@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.3.1...v1.3.2) (2025-10-22)
+
+
+### Bug Fixes
+
+* add provenance attestation ([7adc041](https://github.com/soliantconsulting/create-taxum-api/commit/7adc04184d7c424549760a582236e77525a2d6d3))
+
 ## [1.3.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.3.0...v1.3.1) (2025-09-30)
 
 
