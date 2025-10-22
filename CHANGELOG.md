@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.3.2...v1.4.0) (2025-10-22)
+
+
+### Features
+
+* add OAuth2 feature ([703b089](https://github.com/soliantconsulting/create-taxum-api/commit/703b0890e5673e599397bddb5e833192e3c47c58))
+* **skeleton:** enable trustProxy by default ([975cc27](https://github.com/soliantconsulting/create-taxum-api/commit/975cc279d48ee5dc822cd5da448602c536b7134f))
+
 ## [1.3.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.3.1...v1.3.2) (2025-10-22)
 
 
