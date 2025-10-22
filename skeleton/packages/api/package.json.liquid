@@ -29,6 +29,10 @@
         "@mikro-orm/migrations": "^6.4.11",
         "@sindresorhus/fnv1a": "^3.1.0"
         {%- endif %}
+        {%- if features contains "oauth2" %},
+        "@taxum/jwt": "^1.0.0",
+        "jose": "^6.1.0"
+        {%- endif %}
     },
     "scripts": {
         "start": "tsx watch -C development --import=./src/register-crash-logger.ts --import=./src/temporal-polyfill.ts ./src/index.ts",

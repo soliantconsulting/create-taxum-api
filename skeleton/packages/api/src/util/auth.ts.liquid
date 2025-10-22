@@ -1,0 +1,49 @@
+import assert from "node:assert";
+import { ExtensionKey, type HttpRequest, type HttpResponse } from "@taxum/core/http";
+import { fromFn } from "@taxum/core/middleware/from-fn";
+import type { HttpService } from "@taxum/core/service";
+import { JWT, JwtLayer, UnauthorizedError } from "@taxum/jwt";
+import { createConfiguredObjectGetter } from "@{{project.name}}/app-config";
+import { createRemoteJWKSet } from "jose";
+import { z } from "zod";
+import { logger } from "./logger.js";
+
+const getJwtLayer = createConfiguredObjectGetter(
+    (appConfig) => appConfig.jwt,
+    (config) =>
+        new JwtLayer(createRemoteJWKSet(new URL(config.jwksUri)))
+            .verifyOptions({
+                issuer: config.issuer,
+                audience: config.audience,
+            })
+            .debug(process.env.NODE_ENV !== "production"),
+);
+
+export const jwtLayer = fromFn(
+    async (req: HttpRequest, next: HttpService): Promise<HttpResponse> => {
+        return getJwtLayer().layer(next).invoke(req);
+    },
+);
+
+const jwtPayloadSchema = z.object({
+    sub: z.string(),
+});
+export type JwtPayload = z.output<typeof jwtPayloadSchema>;
+export const JWT_PAYLOAD = new ExtensionKey<JwtPayload>("JWT Payload");
+
+export const jwtPayloadLayer = fromFn(
+    async (req: HttpRequest, next: HttpService): Promise<HttpResponse> => {
+        const jwt = req.extensions.get(JWT);
+        assert(jwt);
+
+        const parseResult = jwtPayloadSchema.safeParse(jwt.payload);
+
+        if (!parseResult.success) {
+            logger.warn("failed to parse JWT payload", { error: parseResult.error });
+            throw new UnauthorizedError("JWT payload failed validation", false);
+        }
+
+        req.extensions.insert(JWT_PAYLOAD, parseResult.data);
+        return next.invoke(req);
+    },
+);

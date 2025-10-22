@@ -39,7 +39,7 @@ await runPipeline({
         stagingDomain: {
             certificateArn: "arn://example",
         },
-        features: ["postgres", "app-config"],
+        features: ["postgres", "app-config", "oauth2"],
         zoomErrorNotifications: {
             stagingSecretArn: "arn://unknown/staging",
             productionSecretArn: "arn://unknown/production",

@@ -34,6 +34,10 @@ export const synthTask = createSynthTask(
                 list.push("dev-app-config.toml.dist");
             }
 
+            if (!context.features?.includes("oauth2")) {
+                list.push("packages/api/src/util/auth.ts.liquid");
+            }
+
             return list;
         },
     },

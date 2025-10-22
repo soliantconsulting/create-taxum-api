@@ -1,0 +1,13 @@
+import { z } from "zod";
+
+export const appConfigSchema = z.object({
+    {%- if features contains "oauth2" %}
+    jwt: z.object({
+        issuer: z.string(),
+        jwksUri: z.url(),
+        audience: z.string(),
+    }),
+    {%- endif %}
+});
+
+export type AppConfig = z.output<typeof appConfigSchema>;

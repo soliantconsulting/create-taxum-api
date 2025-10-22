@@ -25,6 +25,9 @@ import { logger } from "./util/logger.js";
 {% if features contains "postgres" -%}
 import { em, orm } from "./util/mikro-orm.js";
 {%- endif %}
+{% if features contains "oauth2" -%}
+import { jwtLayer, jwtPayloadLayer } from "./util/auth.js";
+{%- endif %}
 {%- if features contains "app-config" %}
 
 const appConfigStartResult = await appConfigHandler.start();
@@ -78,7 +81,12 @@ router
             {% if features contains "postgres" -%}
             .fromFn((req: HttpRequest, next: HttpService) => {
                 return RequestContext.create(em, async () => await next.invoke(req));
-            }),
+            })
+            {%- endif %}
+            {% if features contains "oauth2" -%}
+            .catchError()
+            .withLayer(jwtLayer)
+            .withLayer(jwtPayloadLayer)
             {%- endif %}
     )
     .route(
