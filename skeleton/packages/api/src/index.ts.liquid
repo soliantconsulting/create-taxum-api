@@ -92,6 +92,7 @@ await serve(router, {
     port,
     catchCtrlC: true,
     shutdownTimeout: 5000,
+    trustProxy: true,
     onListen: (address) => {
         logger.info(`Server started on port ${address.port}`);
     },
