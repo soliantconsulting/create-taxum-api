@@ -36,7 +36,7 @@
     "@aws-sdk/client-acm": "^3.1003.0",
     "@aws-sdk/client-secrets-manager": "^3.1003.0",
     "@listr2/prompt-adapter-enquirer": "^3.0.5",
-    "@soliantconsulting/starter-lib": "^2.1.1",
+    "@soliantconsulting/starter-lib": "^2.2.0",
     "enquirer": "^2.4.1",
     "listr2": "^9.0.5"
   },
