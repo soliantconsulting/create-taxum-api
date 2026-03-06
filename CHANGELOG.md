@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.4.0...v1.4.1) (2026-03-06)
+
+
+### Bug Fixes
+
+* update dependencies ([544aa70](https://github.com/soliantconsulting/create-taxum-api/commit/544aa70b31bef0162ebf7b54bf920e58707fbcef))
+
 # [1.4.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.3.2...v1.4.0) (2025-10-22)
 
 
