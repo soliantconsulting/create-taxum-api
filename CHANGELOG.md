@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.6.0...v1.6.1) (2026-05-11)
+
+
+### Bug Fixes
+
+* **ci:** bump workflow actions to v6 ([ddd1029](https://github.com/soliantconsulting/create-taxum-api/commit/ddd1029dae6a699ffebe0dc86923bf45220add28))
+
 # [1.6.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.5.0...v1.6.0) (2026-05-11)
 
 
