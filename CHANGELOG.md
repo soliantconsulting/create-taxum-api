@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.4.2...v1.5.0) (2026-05-11)
+
+
+### Features
+
+* integrate sld-dns-control client for staging certificates ([1c2dbbb](https://github.com/soliantconsulting/create-taxum-api/commit/1c2dbbbbe9648b9a6391f7dd49b9a5e8aefc5032))
+
 ## [1.4.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.4.1...v1.4.2) (2026-03-06)
 
 
