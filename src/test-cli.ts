@@ -37,6 +37,7 @@ await runPipeline({
             arn: "arn://unknown",
         },
         stagingDomain: {
+            domainName: "test-synth.soliant-dev.io",
             certificateArn: "arn://example",
         },
         features: ["postgres", "app-config", "oauth2"],

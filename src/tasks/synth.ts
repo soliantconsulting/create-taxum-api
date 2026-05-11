@@ -5,6 +5,7 @@ import {
     type ProjectContext,
 } from "@soliantconsulting/starter-lib";
 import type { FeaturesContext } from "./features.js";
+import type { StagingDomainContext } from "./staging-domain.js";
 import type { ZoomErrorNotificationsContext } from "./zoom-error-notifications.js";
 
 export const synthTask = createSynthTask(
@@ -12,7 +13,11 @@ export const synthTask = createSynthTask(
     {
         ignoreList: (
             context: Partial<
-                AwsEnvContext & ProjectContext & ZoomErrorNotificationsContext & FeaturesContext
+                AwsEnvContext &
+                    ProjectContext &
+                    ZoomErrorNotificationsContext &
+                    FeaturesContext &
+                    StagingDomainContext
             >,
         ) => {
             const list: string[] = [];
@@ -20,6 +25,10 @@ export const synthTask = createSynthTask(
             if (!context.awsEnv) {
                 list.push("cdk");
                 list.push("bitbucket-pipelines.yml.liquid");
+            }
+
+            if (!context.stagingDomain) {
+                list.push(".sld-dns-control.json.liquid");
             }
 
             if (!context.features?.includes("postgres")) {
