@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.5.0...v1.6.0) (2026-05-11)
+
+
+### Features
+
+* **skeleton:** postgres to 17 and add ssl certs for rds ([3116952](https://github.com/soliantconsulting/create-taxum-api/commit/3116952fecb323db7d2f1b03b2dfa4dd1155365d))
+
 # [1.5.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.4.2...v1.5.0) (2026-05-11)
 
 
