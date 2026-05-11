@@ -17,7 +17,7 @@ import { zoomErrorNotificationsTask } from "./tasks/zoom-error-notifications.js"
 await runPipeline({
     packageName: "@soliantconsulting/create-taxum-api",
     tasks: [
-        createPnpmVersionTask("10.15.0"),
+        createPnpmVersionTask("11.0.0"),
         createProjectTask(),
         createAwsEnvTask(),
         createBitbucketRepositoryTask(),
