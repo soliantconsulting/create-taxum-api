@@ -1,6 +1,6 @@
 {
   "name": "@soliantconsulting/create-taxum-api",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Create a Taxum API",
   "repository": {
     "type": "git",

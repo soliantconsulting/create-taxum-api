@@ -1,3 +1,20 @@
+# [1.7.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.6.1...v1.7.0) (2026-06-05)
+
+
+### Bug Fixes
+
+* **skeleton:** bump ci image to node 26 and install corepack ([c881b82](https://github.com/soliantconsulting/create-taxum-api/commit/c881b8262b1118ddabc08f60951f62b7c16b9a16))
+* **skeleton:** scope injectWorkspacePackages to the docker deploy ([2a81c09](https://github.com/soliantconsulting/create-taxum-api/commit/2a81c09ed627e13cfca31b4e8014205581552403))
+* **skeleton:** update dependencies to latest versions ([9396574](https://github.com/soliantconsulting/create-taxum-api/commit/93965745b64282a1f382bfffe9a6c5543be00402))
+* update dependencies to latest versions ([ca61066](https://github.com/soliantconsulting/create-taxum-api/commit/ca610669b6a141bb06c0d4fd678723bb90369b32))
+
+
+### Features
+
+* **skeleton:** migrate to mikro-orm v7 ([0c58b60](https://github.com/soliantconsulting/create-taxum-api/commit/0c58b60bf8f0f37195c81d0ef5ae3304b037f7b1))
+* **skeleton:** run api on node 26 and drop the temporal polyfill ([0736043](https://github.com/soliantconsulting/create-taxum-api/commit/0736043eb44282cb272e8980e7f36c178dba7f8f))
+* verify node version is at least 24 during setup ([85269fa](https://github.com/soliantconsulting/create-taxum-api/commit/85269fa4f80433dd8439eb30288a49007b522e16))
+
 ## [1.6.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.6.0...v1.6.1) (2026-05-11)
 
 
