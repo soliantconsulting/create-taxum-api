@@ -1,7 +1,8 @@
 import { MikroORM } from "@mikro-orm/postgresql";
 import fnv1a from "@sindresorhus/fnv1a";
+import config from "../mikro-orm.config.js";
 
-export const orm = await MikroORM.init();
+export const orm = await MikroORM.init(await config);
 export const em = orm.em;
 
 const maxInt64 = 2n ** 63n;
@@ -13,7 +14,5 @@ export const lockId = (name: string): bigint => {
 
 await em.transactional(async (em) => {
     em.execute(`SELECT pg_advisory_xact_lock(${lockId("migrate")})`);
-
-    const migrator = orm.getMigrator();
-    await migrator.up();
+    await orm.migrator.up();
 });

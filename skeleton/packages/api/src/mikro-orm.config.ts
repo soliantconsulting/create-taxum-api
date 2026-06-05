@@ -1,5 +1,5 @@
 import { SecretsManager } from "@aws-sdk/client-secrets-manager";
-import { type Constructor, LoadStrategy } from "@mikro-orm/core";
+import type { Constructor } from "@mikro-orm/core";
 import { type MigrationGenerator, Migrator } from "@mikro-orm/migrations";
 import { defineConfig, type Options } from "@mikro-orm/postgresql";
 
@@ -114,7 +114,6 @@ export default (async (): Promise<Options> => {
         discovery: {
             warnWhenNoEntities: false,
         },
-        loadStrategy: LoadStrategy.JOINED,
         ...postgresConfig,
     });
 })();

@@ -7,10 +7,6 @@
         "types": ["node"],
         "rootDir": "src",
         "outDir": "dist"
-        {%- if features contains "postgres" %},
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
-        {%- endif %}
     },
     "include": ["src/**/*"]
 }
