@@ -4,13 +4,13 @@
     "private": true,
     "type": "module",
     "devDependencies": {
-        "@biomejs/biome": "2.2.0",
-        "@commitlint/cli": "^19.8.1",
-        "@commitlint/config-conventional": "^19.8.1",
-        "esbuild": "^0.25.9",
-        "lefthook": "^1.12.3",
-        "tsx": "^4.20.4",
-        "typescript": "^5.9.2"
+        "@biomejs/biome": "2.4.16",
+        "@commitlint/cli": "^21.0.2",
+        "@commitlint/config-conventional": "^21.0.2",
+        "esbuild": "^0.28.0",
+        "lefthook": "^2.1.9",
+        "tsx": "^4.22.4",
+        "typescript": "^6.0.3"
     },
     "scripts": {
         "start": "pnpm --filter api start",
