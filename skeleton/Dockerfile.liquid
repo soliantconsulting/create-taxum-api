@@ -1,8 +1,9 @@
-FROM public.ecr.aws/docker/library/node:24-alpine AS build
+FROM public.ecr.aws/docker/library/node:26-alpine AS build
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+# Node 26 no longer bundles corepack, so install it before enabling.
+RUN npm install -g corepack@latest && corepack enable
 
 # Ideally we'd utilize "pnpm fetch" here and only copy the root package.json (for corepack) and pnpm-lock.yaml, but that
 # is not working right now in monorepos: https://github.com/pnpm/pnpm/issues/6058
@@ -23,11 +24,11 @@ RUN curl https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem | awk
 RUN update-ca-certificates
 {%- endif %}
 
-FROM public.ecr.aws/docker/library/node:24-alpine AS api
+FROM public.ecr.aws/docker/library/node:26-alpine AS api
 COPY --from=build /prod/api/dist /api
 COPY --from=build /prod/api/package.json /api/
 COPY --from=build /prod/api/node_modules /api/node_modules
 COPY --from=build /etc/ssl /etc/ssl
 WORKDIR /api
 ENV NODE_ENV="production"
-CMD [ "node", "--use-openssl-ca", "--enable-source-maps", "--import=./register-crash-logger.js", "--import=./temporal-polyfill.js", "./index.js" ]
+CMD [ "node", "--use-openssl-ca", "--enable-source-maps", "--import=./register-crash-logger.js", "./index.js" ]
