@@ -12,11 +12,11 @@ COPY packages/app-config/package.json /build/packages/app-config/
 {%- endif %}
 COPY packages/api/package.json /build/packages/api/
 WORKDIR /build
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 COPY . /build
 RUN pnpm -r --filter=api{% if features contains "app-config" %} --filter=app-config{% endif %} build
-RUN pnpm deploy --filter=api --prod /prod/api
+RUN PNPM_CONFIG_INJECT_WORKSPACE_PACKAGES=true pnpm deploy --filter=api --prod /prod/api
 {%- if features contains "postgres" %}
 RUN apk add curl ca-certificates
 RUN curl https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem | awk 'BEGIN {c=0;} /BEGIN CERT/{c++} { print > "/usr/local/share/ca-certificates/aws-rds-cert." c ".crt"}'
