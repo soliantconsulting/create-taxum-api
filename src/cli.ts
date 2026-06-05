@@ -5,6 +5,7 @@ import {
     createBitbucketRepositoryTask,
     createDeployRoleTask,
     createGitTask,
+    createNodeVersionTask,
     createPnpmVersionTask,
     createProjectTask,
     runPipeline,
@@ -18,6 +19,7 @@ await runPipeline({
     packageName: "@soliantconsulting/create-taxum-api",
     tasks: [
         createPnpmVersionTask("11.0.0"),
+        createNodeVersionTask("24"),
         createProjectTask(),
         createAwsEnvTask(),
         createBitbucketRepositoryTask(),
