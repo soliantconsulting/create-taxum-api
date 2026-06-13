@@ -19,7 +19,7 @@ await runPipeline({
     packageName: "@soliantconsulting/create-taxum-api",
     tasks: [
         createPnpmVersionTask("11.0.0"),
-        createNodeVersionTask("24"),
+        createNodeVersionTask("26.0.0"),
         createProjectTask(),
         createAwsEnvTask(),
         createBitbucketRepositoryTask(),
