@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.7.0...v1.7.1) (2026-06-13)
+
+
+### Bug Fixes
+
+* pass valid semver to node version check and require node 26 ([56d7552](https://github.com/soliantconsulting/create-taxum-api/commit/56d7552fbb9f96ab8a260d53b819bcc51940769c))
+
 # [1.7.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.6.1...v1.7.0) (2026-06-05)
 
 
