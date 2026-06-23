@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.7.1...v1.7.2) (2026-06-23)
+
+
+### Bug Fixes
+
+* **skeleton:** move cors layer to outermost position ([0348cdc](https://github.com/soliantconsulting/create-taxum-api/commit/0348cdc8125f71c35b32006a5934c1b2e34ee6c4))
+
 ## [1.7.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.7.0...v1.7.1) (2026-06-13)
 
 
