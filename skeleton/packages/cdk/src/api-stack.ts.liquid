@@ -2,7 +2,7 @@ import { fileURLToPath } from "node:url";
 {%- if zoomErrorNotifications %}
 import { ZoomLogErrorNotifications } from "@soliantconsulting/zoom-log-error-notifications";
 {%- endif %}
-import { Duration, Stack, type StackProps } from "aws-cdk-lib";
+import { CfnOutput, Duration, Stack, type StackProps } from "aws-cdk-lib";
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { IpAddressType, SslPolicy } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
@@ -189,6 +189,12 @@ export class ApiStack extends Stack {
         albService.targetGroup.configureHealthCheck({
             enabled: true,
             path: "/health",
+        });
+
+        // Explicit: point-staging-domain matches an output key ending "LoadBalancerDNS",
+        // which the pattern's own ServiceLoadBalancerDNS<hash> does not.
+        new CfnOutput(this, "LoadBalancerDNS", {
+            value: albService.loadBalancer.loadBalancerDnsName,
         });
 
         {% if zoomErrorNotifications %}
