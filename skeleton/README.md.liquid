@@ -24,7 +24,7 @@ After the first staging deploy, point the staging domain at the new load balance
 pnpx @soliantconsulting/sld-dns-control-client point-staging-domain
 ```
 
-This reads `.sld-dns-control.json`, finds the deployed stack's auto-emitted
+This reads `.sld-dns-control.json`, finds the deployed stack's
 `LoadBalancerDNS` output, and upserts the CNAME via the DNS control API. Only needed once after
 the initial deploy; subsequent deploys keep the same load balancer.
 {%- endif %}
