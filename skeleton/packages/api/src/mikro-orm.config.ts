@@ -95,10 +95,10 @@ export default (async (): Promise<Options> => {
     } else {
         postgresConfig = {
             host: "localhost",
-            port: 3001,
+            port: port ? Number.parseInt(port, 10) : 3001,
             user: "dev",
             password: "dev",
-            dbName: "dev",
+            dbName: process.env.POSTGRES_DB_NAME ?? "dev",
         };
     }
 
@@ -113,6 +113,10 @@ export default (async (): Promise<Options> => {
         },
         discovery: {
             warnWhenNoEntities: false,
+        },
+        pool: {
+            min: Number.parseInt(process.env.DB_POOL_MIN ?? "2", 10),
+            max: Number.parseInt(process.env.DB_POOL_MAX ?? "10", 10),
         },
         ...postgresConfig,
     });

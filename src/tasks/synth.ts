@@ -39,6 +39,7 @@ export const synthTask = createSynthTask(
                 list.push("docker-compose.yml");
                 list.push("packages/api/src/mikro-orm.config.ts");
                 list.push("packages/api/src/util/mikro-orm.ts");
+                list.push("packages/api/test/setup");
             }
 
             if (!context.features?.includes("app-config")) {

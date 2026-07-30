@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+# Runs every check even when an earlier one fails, so a single run reports all
+# problems, and exits non-zero if any of them failed.
+
+return_code=0
+
+run() {
+    "$@"
+
+    if [ $? -ne 0 ]; then
+        return_code=1
+    fi
+}
+
+{% if features contains "postgres" -%}
+schema_check() {
+    env POSTGRES_PORT=3002 pnpm --filter api run mikro-orm migration:up || return 1
+
+    local out
+    out=$(env NO_COLOR=1 POSTGRES_PORT=3002 pnpm --silent --filter api run mikro-orm schema:update --dump 2>&1)
+    echo "$out"
+
+    case "$out" in
+        *"Schema is up-to-date"*)
+            return 0
+            ;;
+    esac
+
+    echo "Entities do not match the schema the committed migrations produce." \
+        "Reconcile the entities or add a migration."
+    return 1
+}
+
+{% endif -%}
+# A second (fast) run emits a JUnit report so Bitbucket lists the diagnostics
+# in the pipeline's Tests tab; stdout keeps the readable output. The report is
+# written unconditionally because warnings don't fail the first run but still
+# belong in the report.
+biome_check() {
+    local result=0
+    pnpm biome ci . || result=1
+
+    mkdir -p test-results
+    pnpm biome ci --reporter=junit --reporter-file=test-results/biome.xml . >/dev/null 2>&1
+
+    return $result
+}
+
+run biome_check
+run pnpm typecheck
+run pnpm test
+{%- if features contains "postgres" %}
+run env POSTGRES_PORT=3002 pnpm --filter api run mikro-orm migration:check
+run schema_check
+{%- endif %}
+
+exit $return_code

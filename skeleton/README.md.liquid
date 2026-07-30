@@ -14,6 +14,15 @@ See [jsonapi-serde](https://jsonapi-serde.js.org/) examples for integration.
 - `docker compose up -d`
 {%- endif %}
 - `pnpm start`
+
+## Testing
+
+Run the test suite with `pnpm test`.
+{%- if features contains "postgres" %} Tests that touch the database run against the ephemeral
+`postgres-test` instance, which requires the docker compose environment to be up. Each test file
+runs in its own process with an exclusive database, cloned on demand from a template that is
+migrated once per run.
+{%- endif %}
 {%- if stagingDomain %}
 
 ## Staging DNS

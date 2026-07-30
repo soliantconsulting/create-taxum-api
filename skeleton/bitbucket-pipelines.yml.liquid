@@ -3,6 +3,16 @@ image: public.ecr.aws/docker/library/node:26
 definitions:
   caches:
     pnpm: $BITBUCKET_CLONE_DIR/.pnpm-store
+  {%- if features contains "postgres" %}
+  services:
+    postgres:
+      image: public.ecr.aws/docker/library/postgres:16-alpine
+      environment:
+        PGPORT: '3002'
+        POSTGRES_PASSWORD: dev
+        POSTGRES_USER: dev
+        POSTGRES_DB: dev
+  {%- endif %}
   steps:
     - step: &check
         name: Check
@@ -13,10 +23,13 @@ definitions:
           - npm install -g corepack@latest
           - corepack enable
           - pnpm install
-          - pnpm biome ci .
-          - pnpm typecheck
+          - bash ci-check.sh
         caches:
           - pnpm
+        {%- if features contains "postgres" %}
+        services:
+          - postgres
+        {%- endif %}
     - step: &deploy
         runs-on:
           - 'self.hosted'
