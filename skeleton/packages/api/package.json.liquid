@@ -42,7 +42,7 @@
         "typecheck": "tsc --noEmit",
         "build": "tsc"
         {%- if features contains "postgres" %},
-        "mikro-orm": "tsx -C development ./node_modules/@mikro-orm/cli/esm"
+        "mikro-orm": "tsx -C development ./node_modules/@mikro-orm/cli/cli"
         {%- endif %}
     }
     {%- if features contains "postgres" %},
