@@ -13,6 +13,6 @@ export const lockId = (name: string): bigint => {
 };
 
 await em.transactional(async (em) => {
-    em.execute(`SELECT pg_advisory_xact_lock(${lockId("migrate")})`);
+    await em.execute(`SELECT pg_advisory_xact_lock(${lockId("migrate")})`);
     await orm.migrator.up();
 });
