@@ -1,3 +1,6 @@
+{%- if sentry %}
+import * as Sentry from "@sentry/node";
+{%- endif %}
 import { Logger, NdJsonTransport, PrettyTransport } from "logforth";
 
 process.on("uncaughtException", (error: Error) => {
@@ -7,5 +10,11 @@ process.on("uncaughtException", (error: Error) => {
     });
 
     logger.fatal("Uncaught exception", { error });
+    {%- if sentry %}
+    // Sentry's own process handlers (registered in instrument.ts) capture the crash; the flush
+    // keeps the event from being lost to the process.exit.
+    void Sentry.flush(2000).finally(() => process.exit(1));
+    {%- else %}
     process.exit(1);
+    {%- endif %}
 });

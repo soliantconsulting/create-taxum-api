@@ -7,18 +7,18 @@ import {
     type DeployRoleContext,
     type ProjectContext,
     runPipeline,
+    type SentryContext,
 } from "@soliantconsulting/starter-lib";
 import type { FeaturesContext } from "./tasks/features.js";
 import type { StagingDomainContext } from "./tasks/staging-domain.js";
 import { synthTask } from "./tasks/synth.js";
-import type { ZoomErrorNotificationsContext } from "./tasks/zoom-error-notifications.js";
 
 type BaseContext = ProjectContext &
     AwsEnvContext &
     DeployRoleContext &
     FeaturesContext &
     StagingDomainContext &
-    ZoomErrorNotificationsContext;
+    SentryContext;
 
 await runPipeline({
     packageName: "@soliantconsulting/create-taxum-api",
@@ -41,9 +41,12 @@ await runPipeline({
             certificateArn: "arn://example",
         },
         features: ["postgres", "app-config", "oauth2"],
-        zoomErrorNotifications: {
-            stagingSecretArn: "arn://unknown/staging",
-            productionSecretArn: "arn://unknown/production",
+        sentry: {
+            org: "soliant-consulting-inc",
+            projectSlug: "test-synth",
+            dsn: "https://examplePublicKey@o0.ingest.sentry.io/0",
+            authToken: "sntrys_example",
+            authTokenId: "0",
         },
     } satisfies BaseContext,
 });

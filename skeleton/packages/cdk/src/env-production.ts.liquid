@@ -13,8 +13,8 @@ new ApiStack(app, "{{project.name}}-production", {
     },
     apiEnv: "production",
     certificateArn: "",
-    {%- if zoomErrorNotifications %}
-    zoomWebhookSecretArn: "{{zoomErrorNotifications.productionSecretArn}}",
+    {%- if sentry %}
+    sentryDsn: "{{sentry.dsn}}",
     {%- endif %}
 });
 

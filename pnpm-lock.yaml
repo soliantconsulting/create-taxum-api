@@ -21,8 +21,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       '@soliantconsulting/starter-lib':
-        specifier: ^2.3.0
-        version: 2.3.0(@aws-cdk/cli-plugin-contract@2.182.2)(aws-cdk-lib@2.257.0(constructs@10.6.0))
+        specifier: ^2.4.0
+        version: 2.4.0(@aws-cdk/cli-plugin-contract@2.182.2)(aws-cdk-lib@2.257.0(constructs@10.6.0))
       enquirer:
         specifier: ^2.4.1
         version: 2.4.1
@@ -780,8 +780,8 @@ packages:
     resolution: {integrity: sha512-Lv74/0vO2qncqLBy45bW3NvEt5MaMb4VckElcmxKOgQJ1B6akA+ECievI1cLn6X7AoxVdfgN0Pmg316CARnK0g==}
     hasBin: true
 
-  '@soliantconsulting/starter-lib@2.3.0':
-    resolution: {integrity: sha512-hRCktVhLff0sIMupENtEpqtp23+dlqjti4Fi21Y4Sypl6dUz81itDsNYb8fu303GmXNc5kLoy/kYyk/nJy6hQQ==}
+  '@soliantconsulting/starter-lib@2.4.0':
+    resolution: {integrity: sha512-l/m8boNaPD9x65Z5pxO9rVKGChHwZF26FeSQkMqr+YdYEy6eTxm95VUsIVYg/wD4R4WAe3eddijsx4A9/RCTIg==}
     peerDependencies:
       aws-cdk-lib: ^2.188.0
 
@@ -1204,6 +1204,7 @@ packages:
   git-raw-commits@5.0.1:
     resolution: {integrity: sha512-Y+csSm2GD/PCSh6Isd/WiMjNAydu0VBiG9J7EdQsNA5P9uXvLayqjmTsNlK5Gs9IhblFZqOU0yid5Il5JPoLiQ==}
     engines: {node: '>=18'}
+    deprecated: Deprecated and no longer maintained. Use @conventional-changelog/git-client instead.
     hasBin: true
 
   glob-parent@5.1.2:
@@ -2921,7 +2922,7 @@ snapshots:
       env-paths: 4.0.0
       zod: 4.4.3
 
-  '@soliantconsulting/starter-lib@2.3.0(@aws-cdk/cli-plugin-contract@2.182.2)(aws-cdk-lib@2.257.0(constructs@10.6.0))':
+  '@soliantconsulting/starter-lib@2.4.0(@aws-cdk/cli-plugin-contract@2.182.2)(aws-cdk-lib@2.257.0(constructs@10.6.0))':
     dependencies:
       '@aws-cdk/toolkit-lib': 1.28.0(@aws-cdk/cli-plugin-contract@2.182.2)
       '@aws-sdk/client-cloudformation': 3.1061.0
@@ -2935,6 +2936,7 @@ snapshots:
       liquidjs: 10.27.0
       listr2: 10.2.1
       meow: 14.1.0
+      open: 11.0.0
       semver: 7.8.2
       wildcard-match: 5.1.4
       zod: 4.4.3

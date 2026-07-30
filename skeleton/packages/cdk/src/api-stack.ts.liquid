@@ -1,7 +1,4 @@
 import { fileURLToPath } from "node:url";
-{%- if zoomErrorNotifications %}
-import { ZoomLogErrorNotifications } from "@soliantconsulting/zoom-log-error-notifications";
-{%- endif %}
 import { Duration, Stack, type StackProps } from "aws-cdk-lib";
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { IpAddressType, SslPolicy } from "aws-cdk-lib/aws-elasticloadbalancingv2";
@@ -29,9 +26,6 @@ import {
 } from "aws-cdk-lib/aws-rds";
 {%- endif %}
 import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3";
-{%- if zoomErrorNotifications %}
-import { Secret } from "aws-cdk-lib/aws-secretsmanager";
-{%- endif %}
 import type { Construct } from "constructs";
 {%- if features contains "app-config" %}
 import { AppConfig } from "./app-config.js";
@@ -40,8 +34,8 @@ import { AppConfig } from "./app-config.js";
 type ApiStackProps = StackProps & {
     apiEnv: string;
     certificateArn: string;
-    {%- if zoomErrorNotifications %}
-    zoomWebhookSecretArn: string;
+    {%- if sentry %}
+    sentryDsn: string;
     {%- endif %}
 };
 
@@ -120,6 +114,14 @@ export class ApiStack extends Stack {
                 image: ContainerImage.fromDockerImageAsset(asset),
                 environment: {
                     PORT: "80",
+                    {%- if sentry %}
+                    SENTRY_DSN: props.sentryDsn,
+                    SENTRY_ENVIRONMENT: props.apiEnv,
+                    SENTRY_TRACES_SAMPLE_RATE: "0",
+                    ...(process.env.BITBUCKET_COMMIT
+                        ? { SENTRY_RELEASE: process.env.BITBUCKET_COMMIT }
+                        : {}),
+                    {%- endif %}
                     {%- if features contains "postgres" %}
                     POSTGRES_HOSTNAME: databaseCluster.clusterEndpoint.hostname,
                     POSTGRES_PORT: databaseCluster.clusterEndpoint.port.toString(),
@@ -190,21 +192,5 @@ export class ApiStack extends Stack {
             enabled: true,
             path: "/health",
         });
-
-        {% if zoomErrorNotifications %}
-        if (!appLogDriver.logGroup) {
-            throw new Error("Log group has not been bound to log driver");
-        }
-
-        new ZoomLogErrorNotifications(this, "ErrorNotifications", {
-            logGroup: appLogDriver.logGroup,
-            zoomSecret: Secret.fromSecretCompleteArn(
-                this,
-                "ZoomWebhookSecret",
-                props.zoomWebhookSecretArn,
-            ),
-            awsAccessPortalSubdomain: "d-906750cb5a",
-        });
-        {% endif %}
     }
 }

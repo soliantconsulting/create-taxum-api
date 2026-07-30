@@ -37,7 +37,7 @@
     "@aws-sdk/client-secrets-manager": "^3.1061.0",
     "@listr2/prompt-adapter-enquirer": "^4.2.1",
     "@soliantconsulting/sld-dns-control-client": "^1.0.0",
-    "@soliantconsulting/starter-lib": "^2.3.0",
+    "@soliantconsulting/starter-lib": "^2.4.0",
     "enquirer": "^2.4.1",
     "listr2": "^10.2.1"
   },

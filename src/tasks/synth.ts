@@ -3,10 +3,10 @@ import {
     type AwsEnvContext,
     createSynthTask,
     type ProjectContext,
+    type SentryContext,
 } from "@soliantconsulting/starter-lib";
 import type { FeaturesContext } from "./features.js";
 import type { StagingDomainContext } from "./staging-domain.js";
-import type { ZoomErrorNotificationsContext } from "./zoom-error-notifications.js";
 
 export const synthTask = createSynthTask(
     fileURLToPath(new URL("../../skeleton", import.meta.url)),
@@ -15,7 +15,7 @@ export const synthTask = createSynthTask(
             context: Partial<
                 AwsEnvContext &
                     ProjectContext &
-                    ZoomErrorNotificationsContext &
+                    SentryContext &
                     FeaturesContext &
                     StagingDomainContext
             >,
@@ -29,6 +29,10 @@ export const synthTask = createSynthTask(
 
             if (!context.stagingDomain) {
                 list.push(".sld-dns-control.json.liquid");
+            }
+
+            if (!context.sentry) {
+                list.push("packages/api/src/instrument.ts");
             }
 
             if (!context.features?.includes("postgres")) {

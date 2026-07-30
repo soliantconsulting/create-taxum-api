@@ -10,8 +10,8 @@ new ApiStack(app, "{{project.name}}-staging", {
     },
     apiEnv: "staging",
     certificateArn: "{{stagingDomain.certificateArn}}",
-    {%- if zoomErrorNotifications %}
-    zoomWebhookSecretArn: "{{zoomErrorNotifications.stagingSecretArn}}",
+    {%- if sentry %}
+    sentryDsn: "{{sentry.dsn}}",
     {%- endif %}
 });
 

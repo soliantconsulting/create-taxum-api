@@ -8,12 +8,12 @@ import {
     createNodeVersionTask,
     createPnpmVersionTask,
     createProjectTask,
+    createSentryTask,
     runPipeline,
 } from "@soliantconsulting/starter-lib";
 import { featuresTask } from "./tasks/features.js";
 import { stagingDomainTask } from "./tasks/staging-domain.js";
 import { synthTask } from "./tasks/synth.js";
-import { zoomErrorNotificationsTask } from "./tasks/zoom-error-notifications.js";
 
 await runPipeline({
     packageName: "@soliantconsulting/create-taxum-api",
@@ -25,7 +25,7 @@ await runPipeline({
         createBitbucketRepositoryTask(),
         createDeployRoleTask(),
         stagingDomainTask,
-        zoomErrorNotificationsTask,
+        createSentryTask({ projectPlatform: "node" }),
         featuresTask,
         synthTask,
         createGitTask(),

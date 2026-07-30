@@ -15,6 +15,9 @@
         {%- if features contains "app-config" %}
         "@{{project.name}}/app-config": "workspace:*",
         {%- endif %}
+        {%- if sentry %}
+        "@sentry/node": "^10.68.0",
+        {%- endif %}
         "dotenv": "^17.4.2",
         "logforth": "^1.3.0",
         "zod": "^4.4.3",
@@ -35,7 +38,7 @@
         {%- endif %}
     },
     "scripts": {
-        "start": "tsx watch -C development --import=./src/register-crash-logger.ts ./src/index.ts",
+        "start": "tsx watch -C development{% if sentry %} --import=./src/instrument.ts{% endif %} --import=./src/register-crash-logger.ts ./src/index.ts",
         "typecheck": "tsc --noEmit",
         "build": "tsc"
         {%- if features contains "postgres" %},

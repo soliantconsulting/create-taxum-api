@@ -9,6 +9,9 @@ import {
 {% if features contains "postgres" -%}
 import { RequestContext } from "@mikro-orm/core";
 {%- endif %}
+{%- if sentry %}
+import * as Sentry from "@sentry/node";
+{%- endif %}
 import { type HttpRequest, jsonResponse } from "@taxum/core/http";
 import { setLoggerProxy } from "@taxum/core/logging";
 import { ServiceBuilder } from "@taxum/core/middleware/builder";
@@ -54,6 +57,9 @@ router
         jsonApiErrorHandler({
             logError: (error, exposed) => {
                 if (!exposed) {
+                    {%- if sentry %}
+                    Sentry.captureException(error);
+                    {%- endif %}
                     logger.error("Failed to serve request", { error });
                 }
             },
@@ -75,6 +81,10 @@ router
             .fromFn((req: HttpRequest, next: HttpService) => {
                 const requestId = req.extensions.get(REQUEST_ID);
                 assert(requestId);
+                {%- if sentry %}
+
+                Sentry.getIsolationScope().setTag("request_id", requestId);
+                {%- endif %}
 
                 return logger.withContext({ requestId }, async () => await next.invoke(req));
             })
