@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.8.1...v1.8.2) (2026-08-03)
+
+
+### Bug Fixes
+
+* update to starter-lib 3 with listr2 11 ([3d1b2db](https://github.com/soliantconsulting/create-taxum-api/commit/3d1b2dbff6afd7e1b4ea6b63338592a9d0580bb6))
+
 ## [1.8.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.8.0...v1.8.1) (2026-08-03)
 
 
