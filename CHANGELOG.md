@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/soliantconsulting/create-taxum-api/compare/v1.8.2...v1.8.3) (2026-08-03)
+
+
+### Bug Fixes
+
+* declare node types explicitly and align the tsconfig base ([378877e](https://github.com/soliantconsulting/create-taxum-api/commit/378877e0ae4309df9d5b4c648c3145a07bde5e5f))
+
 ## [1.8.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.8.1...v1.8.2) (2026-08-03)
 
 
