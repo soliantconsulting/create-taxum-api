@@ -4,6 +4,6 @@ allowBuilds:
   '@biomejs/biome': true
   esbuild: true
   lefthook: true
-# Temporary: starter-lib 2.4.0 was published <24h ago; remove this once it ages past the minimumReleaseAge cutoff.
+# Temporary: starter-lib 3.0.0 was published <24h ago; remove this once it ages past the minimumReleaseAge cutoff.
 minimumReleaseAgeExclude:
-  - '@soliantconsulting/starter-lib@2.4.0'
+  - '@soliantconsulting/starter-lib@3.0.0'
