@@ -10,7 +10,7 @@
         "esbuild": "^0.28.0",
         "lefthook": "^2.1.10",
         "tsx": "^4.23.3",
-        "typescript": "^6.0.3"
+        "typescript": "^7.0.2"
     },
     "scripts": {
         "start": "pnpm --filter api start",
