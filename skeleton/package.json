@@ -4,12 +4,12 @@
     "private": true,
     "type": "module",
     "devDependencies": {
-        "@biomejs/biome": "2.4.16",
-        "@commitlint/cli": "^21.0.2",
-        "@commitlint/config-conventional": "^21.0.2",
+        "@biomejs/biome": "2.5.6",
+        "@commitlint/cli": "^21.2.1",
+        "@commitlint/config-conventional": "^21.2.0",
         "esbuild": "^0.28.0",
-        "lefthook": "^2.1.9",
-        "tsx": "^4.22.4",
+        "lefthook": "^2.1.10",
+        "tsx": "^4.23.3",
         "typescript": "^6.0.3"
     },
     "scripts": {
