@@ -39,9 +39,9 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^21.2.0
         version: 21.2.0
-      '@tsconfig/node22':
-        specifier: ^22.0.5
-        version: 22.0.5
+      '@tsconfig/node26':
+        specifier: ^26.0.0
+        version: 26.0.0
       '@types/node':
         specifier: ^26.1.2
         version: 26.1.2
@@ -820,8 +820,8 @@ packages:
   '@taxum/core@1.2.4':
     resolution: {integrity: sha512-BRermJ8EKaLRYMGO2MG2Zr6UYitfWZW4UJBdedZPYPsTviHVv/314hfd2lyM5JTlFU8t4uVZEXcHza0FRa0k1w==}
 
-  '@tsconfig/node22@22.0.5':
-    resolution: {integrity: sha512-hLf2ld+sYN/BtOJjHUWOk568dvjFQkHnLNa6zce25GIH+vxKfvTgm3qpaH6ToF5tu/NN0IH66s+Bb5wElHrLcw==}
+  '@tsconfig/node26@26.0.0':
+    resolution: {integrity: sha512-AlW882moMu/JzvTVjdGqJEsrqD5nSWHiFD7Aeuw6Rb58S4Aig+09mDUFFlXJx/y6/y77NwGYLlqhWxvolcC0sw==}
 
   '@types/node@26.1.2':
     resolution: {integrity: sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg==}
@@ -3109,7 +3109,7 @@ snapshots:
       nested-search-params: 1.0.1
       ts-pattern: 5.9.0
 
-  '@tsconfig/node22@22.0.5': {}
+  '@tsconfig/node26@26.0.0': {}
 
   '@types/node@26.1.2':
     dependencies:
