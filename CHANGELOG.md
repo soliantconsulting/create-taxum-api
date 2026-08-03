@@ -1,3 +1,11 @@
+## [1.8.1](https://github.com/soliantconsulting/create-taxum-api/compare/v1.8.0...v1.8.1) (2026-08-03)
+
+
+### Bug Fixes
+
+* migrate to TypeScript 7 ([6e805f5](https://github.com/soliantconsulting/create-taxum-api/commit/6e805f563cb2cad94e7f09ce7442ca15fb9060c8))
+* update dependencies to current versions ([e5bb6b2](https://github.com/soliantconsulting/create-taxum-api/commit/e5bb6b201edec1486cc6819075a7436f687e3f74))
+
 # [1.8.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.7.2...v1.8.0) (2026-08-03)
 
 
