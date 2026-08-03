@@ -1,3 +1,17 @@
+# [1.8.0](https://github.com/soliantconsulting/create-taxum-api/compare/v1.7.2...v1.8.0) (2026-08-03)
+
+
+### Bug Fixes
+
+* **skeleton:** await advisory lock acquisition before running migrations ([b4e11bd](https://github.com/soliantconsulting/create-taxum-api/commit/b4e11bda15f0f1544aa6a344885872b98b242649))
+* **skeleton:** point mikro-orm script at the v7 CLI entry ([1033f9f](https://github.com/soliantconsulting/create-taxum-api/commit/1033f9fd9c78fb9cb4fc2b92adf7ec0489ab1e1d))
+
+
+### Features
+
+* replace Zoom log error notifications with Sentry ([2306b2d](https://github.com/soliantconsulting/create-taxum-api/commit/2306b2dfacba53c181e5ace1c670109ffa5f67fd))
+* **skeleton:** add test setup with parallel-safe postgres harness ([999860c](https://github.com/soliantconsulting/create-taxum-api/commit/999860c1d3b660fc3db452a23e19a2e073c96975))
+
 ## [1.7.2](https://github.com/soliantconsulting/create-taxum-api/compare/v1.7.1...v1.7.2) (2026-06-23)
 
 
