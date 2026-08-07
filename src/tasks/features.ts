@@ -22,7 +22,8 @@ export const featuresTask: ListrTask<Partial<ProjectContext & AwsEnvContext & Fe
             ],
         });
 
-        if (context.features.includes("oauth2") && context.features.includes("app-config")) {
+        // OAuth2 renders `auth.ts`, which imports from the app-config package.
+        if (context.features.includes("oauth2") && !context.features.includes("app-config")) {
             context.features.push("app-config");
         }
     },
