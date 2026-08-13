@@ -33,6 +33,7 @@ export const synthTask = createSynthTask(
 
             if (!context.sentry) {
                 list.push("packages/api/src/instrument.ts");
+                list.push("packages/api/src/util/sentry-transport.ts");
             }
 
             if (!context.features?.includes("postgres")) {
