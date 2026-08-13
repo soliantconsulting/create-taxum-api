@@ -1,8 +1,17 @@
 import { Logger, NdJsonTransport, PrettyTransport } from "logforth";
 import { env } from "./env.js";
+{%- if sentry %}
+import { SentryTransport } from "./sentry-transport.js";
+{%- endif %}
 
 export const logger = new Logger({
+    {%- if sentry %}
+    transport: new SentryTransport(
+        process.env.NODE_ENV === "production" ? new NdJsonTransport() : new PrettyTransport(),
+    ),
+    {%- else %}
     transport:
         process.env.NODE_ENV === "production" ? new NdJsonTransport() : new PrettyTransport(),
+    {%- endif %}
     minLevel: env.logger.minLevel,
 });

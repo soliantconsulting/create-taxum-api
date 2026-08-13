@@ -45,9 +45,6 @@ router
         jsonApiErrorHandler({
             logError: (error, exposed) => {
                 if (!exposed) {
-                    {%- if sentry %}
-                    Sentry.captureException(error);
-                    {%- endif %}
                     logger.error("Failed to serve request", { error });
                 }
             },
