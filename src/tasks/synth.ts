@@ -52,6 +52,11 @@ export const synthTask = createSynthTask(
                 list.push("packages/api/src/util/auth.ts.liquid");
             }
 
+            if (context.oauthProvider !== "cognito") {
+                list.push("packages/api/src/util/cognito-claims.ts");
+                list.push("packages/api/test/cognito-claims.test.ts");
+            }
+
             return list;
         },
     },

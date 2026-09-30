@@ -5,7 +5,11 @@ export const appConfigSchema = z.object({
     jwt: z.object({
         issuer: z.string(),
         jwksUri: z.url(),
+        {%- if oauthProvider == "cognito" %}
+        clientIds: z.array(z.string()).min(1),
+        {%- else %}
         audience: z.string(),
+        {%- endif %}
     }),
     {%- endif %}
 });

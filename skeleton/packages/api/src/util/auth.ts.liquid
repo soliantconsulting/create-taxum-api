@@ -1,3 +1,54 @@
+{%- if oauthProvider == "cognito" -%}
+import assert from "node:assert";
+import type { HttpRequest, HttpResponse } from "@taxum/core/http";
+import { fromFn } from "@taxum/core/middleware/from-fn";
+import type { HttpService } from "@taxum/core/service";
+import { JWT, JwtLayer, UnauthorizedError } from "@taxum/jwt";
+import { createConfiguredObjectGetter } from "@{{project.name}}/app-config";
+import { createRemoteJWKSet } from "jose";
+import { JWT_PAYLOAD, parseCognitoClaims } from "./cognito-claims.js";
+import { logger } from "./logger.js";
+
+export { JWT_PAYLOAD, type JwtPayload, requireGroup } from "./cognito-claims.js";
+
+const getJwtLayer = createConfiguredObjectGetter(
+    (appConfig) => appConfig.jwt,
+    (config) =>
+        new JwtLayer(createRemoteJWKSet(new URL(config.jwksUri)))
+            .verifyOptions({
+                issuer: config.issuer,
+            })
+            .debug(process.env.NODE_ENV !== "production"),
+);
+
+const getAllowedClientIds = createConfiguredObjectGetter(
+    (appConfig) => appConfig.jwt,
+    (config) => config.clientIds,
+);
+
+export const jwtLayer = fromFn(
+    async (req: HttpRequest, next: HttpService): Promise<HttpResponse> => {
+        return getJwtLayer().layer(next).invoke(req);
+    },
+);
+
+export const jwtPayloadLayer = fromFn(
+    async (req: HttpRequest, next: HttpService): Promise<HttpResponse> => {
+        const jwt = req.extensions.get(JWT);
+        assert(jwt);
+
+        const payload = parseCognitoClaims(jwt.payload, getAllowedClientIds());
+
+        if (!payload) {
+            logger.warn("JWT payload failed validation");
+            throw new UnauthorizedError("JWT payload failed validation", false);
+        }
+
+        req.extensions.insert(JWT_PAYLOAD, payload);
+        return next.invoke(req);
+    },
+);
+{%- else -%}
 import assert from "node:assert";
 import { ExtensionKey, type HttpRequest, type HttpResponse } from "@taxum/core/http";
 import { fromFn } from "@taxum/core/middleware/from-fn";
@@ -47,3 +98,4 @@ export const jwtPayloadLayer = fromFn(
         return next.invoke(req);
     },
 );
+{%- endif %}
