@@ -2,6 +2,9 @@ import { fileURLToPath } from "node:url";
 import { Duration, Stack, type StackProps } from "aws-cdk-lib";
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { IpAddressType, SslPolicy } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+{%- if oauthProvider == "cognito" %}
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+{%- endif %}
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import {
     {%- if features contains "postgres" %}
@@ -34,6 +37,9 @@ import { AppConfig } from "./app-config.js";
 type ApiStackProps = StackProps & {
     apiEnv: string;
     certificateArn: string;
+    {%- if oauthProvider == "cognito" %}
+    userPoolArn: string;
+    {%- endif %}
     {%- if sentry %}
     sentryDsn: string;
     {%- endif %}
@@ -42,6 +48,14 @@ type ApiStackProps = StackProps & {
 export class ApiStack extends Stack {
     public constructor(scope: Construct, id: string, props: ApiStackProps) {
         super(scope, id, props);
+        {%- if oauthProvider == "cognito" %}
+
+        if (!props.userPoolArn) {
+            throw new Error(
+                "userPoolArn is empty: copy UserPoolArn from the Cognito stack outputs into this env file",
+            );
+        }
+        {%- endif %}
 
         const vpc = new Vpc(this, "Vpc", {
             ipProtocol: IpProtocol.DUAL_STACK,
@@ -179,6 +193,19 @@ export class ApiStack extends Stack {
         {%- endif %}
         {%- if features contains "app-config" %}
         appConfig.grantRead(albService.taskDefinition.taskRole);
+        {%- endif %}
+        {%- if oauthProvider == "cognito" %}
+        albService.taskDefinition.taskRole.addToPrincipalPolicy(
+            new PolicyStatement({
+                actions: [
+                    "cognito-idp:Admin*",
+                    "cognito-idp:ListUsers",
+                    "cognito-idp:ListGroups",
+                    "cognito-idp:ListUsersInGroup",
+                ],
+                resources: [props.userPoolArn],
+            }),
+        );
         {%- endif %}
 
         const serviceScaling = albService.service.autoScaleTaskCount({ maxCapacity: 10 });

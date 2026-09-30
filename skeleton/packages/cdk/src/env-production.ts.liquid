@@ -13,6 +13,10 @@ new ApiStack(app, "{{project.name}}-production", {
     },
     apiEnv: "production",
     certificateArn: "",
+    {%- if oauthProvider == "cognito" %}
+    // UserPoolArn output of the Cognito stack for this environment
+    userPoolArn: "",
+    {%- endif %}
     {%- if sentry %}
     sentryDsn: "{{sentry.dsn}}",
     {%- endif %}

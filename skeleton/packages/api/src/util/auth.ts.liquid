@@ -40,7 +40,10 @@ export const jwtPayloadLayer = fromFn(
         const payload = parseCognitoClaims(jwt.payload, getAllowedClientIds());
 
         if (!payload) {
-            logger.warn("JWT payload failed validation");
+            logger.warn("JWT payload failed validation", {
+                clientId: jwt.payload.client_id,
+                tokenUse: jwt.payload.token_use,
+            });
             throw new UnauthorizedError("JWT payload failed validation", false);
         }
 
