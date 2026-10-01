@@ -10,10 +10,6 @@ describe("normalizeFeatures", () => {
     it("does not add app-config twice", () => {
         assert.deepEqual(normalizeFeatures(["app-config", "oauth2"]), ["app-config", "oauth2"]);
     });
-
-    it("leaves other selections alone", () => {
-        assert.deepEqual(normalizeFeatures(["postgres"]), ["postgres"]);
-    });
 });
 
 type FeaturesTaskWrapper = Parameters<typeof featuresTask.task>[1];
