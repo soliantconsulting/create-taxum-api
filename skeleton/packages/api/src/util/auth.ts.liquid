@@ -1,15 +1,28 @@
-{%- if oauthProvider == "cognito" -%}
 import assert from "node:assert";
+{%- if oauthProvider == "cognito" %}
 import type { HttpRequest, HttpResponse } from "@taxum/core/http";
+{%- else %}
+import { ExtensionKey, type HttpRequest, type HttpResponse } from "@taxum/core/http";
+{%- endif %}
 import { fromFn } from "@taxum/core/middleware/from-fn";
 import type { HttpService } from "@taxum/core/service";
 import { JWT, JwtLayer, UnauthorizedError } from "@taxum/jwt";
+{%- if oauthProvider == "cognito" %}
+import { createConfiguredObjectGetter, getAppConfig } from "@{{project.name}}/app-config";
+{%- else %}
 import { createConfiguredObjectGetter } from "@{{project.name}}/app-config";
+{%- endif %}
 import { createRemoteJWKSet } from "jose";
+{%- if oauthProvider == "cognito" %}
 import { JWT_PAYLOAD, parseCognitoClaims } from "./cognito-claims.js";
+{%- else %}
+import { z } from "zod";
+{%- endif %}
 import { logger } from "./logger.js";
+{%- if oauthProvider == "cognito" %}
 
 export { JWT_PAYLOAD, type JwtPayload, requireGroup } from "./cognito-claims.js";
+{%- endif %}
 
 const getJwtLayer = createConfiguredObjectGetter(
     (appConfig) => appConfig.jwt,
@@ -17,13 +30,11 @@ const getJwtLayer = createConfiguredObjectGetter(
         new JwtLayer(createRemoteJWKSet(new URL(config.jwksUri)))
             .verifyOptions({
                 issuer: config.issuer,
+                {%- if oauthProvider != "cognito" %}
+                audience: config.audience,
+                {%- endif %}
             })
             .debug(process.env.NODE_ENV !== "production"),
-);
-
-const getAllowedClientIds = createConfiguredObjectGetter(
-    (appConfig) => appConfig.jwt,
-    (config) => config.clientIds,
 );
 
 export const jwtLayer = fromFn(
@@ -31,13 +42,22 @@ export const jwtLayer = fromFn(
         return getJwtLayer().layer(next).invoke(req);
     },
 );
+{%- if oauthProvider != "cognito" %}
+
+const jwtPayloadSchema = z.object({
+    sub: z.string(),
+});
+export type JwtPayload = z.output<typeof jwtPayloadSchema>;
+export const JWT_PAYLOAD = new ExtensionKey<JwtPayload>("JWT Payload");
+{%- endif %}
 
 export const jwtPayloadLayer = fromFn(
     async (req: HttpRequest, next: HttpService): Promise<HttpResponse> => {
         const jwt = req.extensions.get(JWT);
         assert(jwt);
+        {%- if oauthProvider == "cognito" %}
 
-        const payload = parseCognitoClaims(jwt.payload, getAllowedClientIds());
+        const payload = parseCognitoClaims(jwt.payload, getAppConfig().jwt.clientIds);
 
         if (!payload) {
             logger.warn("JWT payload failed validation", {
@@ -48,47 +68,7 @@ export const jwtPayloadLayer = fromFn(
         }
 
         req.extensions.insert(JWT_PAYLOAD, payload);
-        return next.invoke(req);
-    },
-);
-{%- else -%}
-import assert from "node:assert";
-import { ExtensionKey, type HttpRequest, type HttpResponse } from "@taxum/core/http";
-import { fromFn } from "@taxum/core/middleware/from-fn";
-import type { HttpService } from "@taxum/core/service";
-import { JWT, JwtLayer, UnauthorizedError } from "@taxum/jwt";
-import { createConfiguredObjectGetter } from "@{{project.name}}/app-config";
-import { createRemoteJWKSet } from "jose";
-import { z } from "zod";
-import { logger } from "./logger.js";
-
-const getJwtLayer = createConfiguredObjectGetter(
-    (appConfig) => appConfig.jwt,
-    (config) =>
-        new JwtLayer(createRemoteJWKSet(new URL(config.jwksUri)))
-            .verifyOptions({
-                issuer: config.issuer,
-                audience: config.audience,
-            })
-            .debug(process.env.NODE_ENV !== "production"),
-);
-
-export const jwtLayer = fromFn(
-    async (req: HttpRequest, next: HttpService): Promise<HttpResponse> => {
-        return getJwtLayer().layer(next).invoke(req);
-    },
-);
-
-const jwtPayloadSchema = z.object({
-    sub: z.string(),
-});
-export type JwtPayload = z.output<typeof jwtPayloadSchema>;
-export const JWT_PAYLOAD = new ExtensionKey<JwtPayload>("JWT Payload");
-
-export const jwtPayloadLayer = fromFn(
-    async (req: HttpRequest, next: HttpService): Promise<HttpResponse> => {
-        const jwt = req.extensions.get(JWT);
-        assert(jwt);
+        {%- else %}
 
         const parseResult = jwtPayloadSchema.safeParse(jwt.payload);
 
@@ -98,7 +78,7 @@ export const jwtPayloadLayer = fromFn(
         }
 
         req.extensions.insert(JWT_PAYLOAD, parseResult.data);
+        {%- endif %}
         return next.invoke(req);
     },
 );
-{%- endif %}
