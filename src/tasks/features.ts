@@ -3,7 +3,7 @@ import type { AwsEnvContext, ProjectContext } from "@soliantconsulting/starter-l
 import type { ListrTask } from "listr2";
 
 type Feature = "postgres" | "app-config" | "oauth2";
-export type OAuthProvider = "auth0" | "cognito";
+type OAuthProvider = "auth0" | "cognito";
 
 export type FeaturesContext = {
     features: Feature[];
