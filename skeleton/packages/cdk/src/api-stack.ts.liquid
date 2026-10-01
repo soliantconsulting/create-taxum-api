@@ -1,5 +1,9 @@
 import { fileURLToPath } from "node:url";
+{%- if oauthProvider == "cognito" %}
+import { Duration, Stack, type StackProps, Token } from "aws-cdk-lib";
+{%- else %}
 import { Duration, Stack, type StackProps } from "aws-cdk-lib";
+{%- endif %}
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { IpAddressType, SslPolicy } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 {%- if oauthProvider == "cognito" %}
@@ -45,16 +49,45 @@ type ApiStackProps = StackProps & {
     {%- endif %}
 };
 
+{%- if oauthProvider == "cognito" %}
+
+const userPoolArnPattern =
+    /^arn:aws[a-z-]*:cognito-idp:([a-z0-9-]+):(\d{12}):userpool\/[a-z0-9-]+_[A-Za-z0-9]+$/;
+
+const checkUserPoolArn = (userPoolArn: string, env: StackProps["env"]): void => {
+    if (!userPoolArn) {
+        throw new Error(
+            "userPoolArn is empty: copy UserPoolArn from the Cognito stack outputs into this env file",
+        );
+    }
+
+    const match = userPoolArnPattern.exec(userPoolArn);
+
+    if (!match) {
+        throw new Error(`userPoolArn is not a Cognito user pool ARN: ${userPoolArn}`);
+    }
+
+    const [, region, account] = match;
+
+    // Skip the check when the env is left to the CLI and is still a token.
+    if (env?.region && !Token.isUnresolved(env.region) && env.region !== region) {
+        throw new Error(`userPoolArn is in ${region}, but this stack deploys to ${env.region}`);
+    }
+
+    if (env?.account && !Token.isUnresolved(env.account) && env.account !== account) {
+        throw new Error(
+            `userPoolArn is in account ${account}, but this stack deploys to ${env.account}`,
+        );
+    }
+};
+{%- endif %}
+
 export class ApiStack extends Stack {
     public constructor(scope: Construct, id: string, props: ApiStackProps) {
         super(scope, id, props);
         {%- if oauthProvider == "cognito" %}
 
-        if (!props.userPoolArn) {
-            throw new Error(
-                "userPoolArn is empty: copy UserPoolArn from the Cognito stack outputs into this env file",
-            );
-        }
+        checkUserPoolArn(props.userPoolArn, props.env);
         {%- endif %}
 
         const vpc = new Vpc(this, "Vpc", {

@@ -33,7 +33,7 @@ await runPipeline({
             path: fileURLToPath(new URL(`../${directory}`, import.meta.url)),
         },
         awsEnv: {
-            accountId: "123456789",
+            accountId: "123456789012",
             region: "us-east-1",
         },
         deployRole: {
