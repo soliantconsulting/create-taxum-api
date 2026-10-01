@@ -1,9 +1,5 @@
 import { fileURLToPath } from "node:url";
-{%- if oauthProvider == "cognito" %}
-import { Duration, Stack, type StackProps, Token } from "aws-cdk-lib";
-{%- else %}
 import { Duration, Stack, type StackProps } from "aws-cdk-lib";
-{%- endif %}
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { IpAddressType, SslPolicy } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 {%- if oauthProvider == "cognito" %}
@@ -69,12 +65,11 @@ const checkUserPoolArn = (userPoolArn: string, env: StackProps["env"]): void => 
 
     const [, region, account] = match;
 
-    // Skip the check when the env is left to the CLI and is still a token.
-    if (env?.region && !Token.isUnresolved(env.region) && env.region !== region) {
+    if (env?.region && env.region !== region) {
         throw new Error(`userPoolArn is in ${region}, but this stack deploys to ${env.region}`);
     }
 
-    if (env?.account && !Token.isUnresolved(env.account) && env.account !== account) {
+    if (env?.account && env.account !== account) {
         throw new Error(
             `userPoolArn is in account ${account}, but this stack deploys to ${env.account}`,
         );
