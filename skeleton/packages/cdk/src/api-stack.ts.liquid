@@ -198,7 +198,15 @@ export class ApiStack extends Stack {
         albService.taskDefinition.taskRole.addToPrincipalPolicy(
             new PolicyStatement({
                 actions: [
-                    "cognito-idp:Admin*",
+                    "cognito-idp:AdminCreateUser",
+                    "cognito-idp:AdminGetUser",
+                    "cognito-idp:AdminDisableUser",
+                    "cognito-idp:AdminEnableUser",
+                    "cognito-idp:AdminDeleteUser",
+                    "cognito-idp:AdminResetUserPassword",
+                    "cognito-idp:AdminAddUserToGroup",
+                    "cognito-idp:AdminRemoveUserFromGroup",
+                    "cognito-idp:AdminListGroupsForUser",
                     "cognito-idp:ListUsers",
                     "cognito-idp:ListGroups",
                     "cognito-idp:ListUsersInGroup",

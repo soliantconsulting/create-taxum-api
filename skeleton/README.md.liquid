@@ -100,8 +100,8 @@ clientIds = ["<SpaClientId>"]
 ```
 
 Set `userPoolArn` in `packages/cdk/src/env-*.ts` to the `UserPoolArn` output. Synth fails while it
-is empty. The API can then manage users in that pool (invite, disable, groups) without a stored
-secret.
+is empty. The API can then manage users in that pool (invite, disable, delete, reset password,
+manage groups) without a stored secret.
 
 Guard admin routes with `requireGroup("admin")` from `src/util/auth.ts`. Only access tokens from the
 listed clients are accepted; ID tokens get a 401.
