@@ -30,7 +30,10 @@ const getJwtLayer = createConfiguredObjectGetter(
         new JwtLayer(createRemoteJWKSet(new URL(config.jwksUri)))
             .verifyOptions({
                 issuer: config.issuer,
-                {%- if oauthProvider != "cognito" %}
+                {%- if oauthProvider == "cognito" %}
+                algorithms: ["RS256"],
+                requiredClaims: ["exp", "iat"],
+                {%- else %}
                 audience: config.audience,
                 {%- endif %}
             })
