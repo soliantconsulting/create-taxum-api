@@ -45,7 +45,7 @@ export const synthTask = createSynthTask(
             if (!context.features?.includes("app-config")) {
                 list.push("packages/app-config");
                 list.push("packages/cdk/src/app-config.ts");
-                list.push("dev-app-config.toml.dist");
+                list.push("dev-app-config.toml.dist.liquid");
             }
 
             if (!context.features?.includes("oauth2")) {
