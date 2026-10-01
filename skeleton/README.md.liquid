@@ -89,15 +89,8 @@ its file and its dependency `memize` from this project.
 
 ## Using Cognito instead of Auth0
 
-Tokens come from the user pool created with `create-cognito`. Fill these in from its stack outputs,
-in AppConfig for each environment and in `dev-app-config.toml` locally:
-
-```toml
-[jwt]
-issuer = "<Issuer>"
-jwksUri = "<Issuer>/.well-known/jwks.json"
-clientIds = ["<SpaClientId>"]
-```
+Fill `[jwt]` in `dev-app-config.toml` (copied from the `.dist`) and in AppConfig from the
+`create-cognito` stack outputs.
 
 Set `userPoolArn` in `packages/cdk/src/env-*.ts` to the `UserPoolArn` output. Synth fails while it
 is empty, malformed, or in another account or region than the stack. The API can then manage users
