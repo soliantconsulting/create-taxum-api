@@ -41,7 +41,12 @@ export const requireGroup = (group: string) =>
     fromFn(async (req: HttpRequest, next: HttpService): Promise<HttpResponse> => {
         const payload = req.extensions.get(JWT_PAYLOAD);
 
-        if (!payload?.groups.includes(group)) {
+        // No payload means the route is missing jwtPayloadLayer or the caller is anonymous.
+        if (!payload) {
+            throw new ClientError(StatusCode.UNAUTHORIZED, "Authentication required");
+        }
+
+        if (!payload.groups.includes(group)) {
             throw new ClientError(StatusCode.FORBIDDEN, "Forbidden");
         }
 

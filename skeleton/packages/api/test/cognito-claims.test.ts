@@ -56,6 +56,15 @@ const adminRouter = (groups: string[]): Router =>
         .layer(withGroups(groups));
 
 describe("requireGroup", () => {
+    it("returns 401 when there is no JWT payload", async () => {
+        const router = new Router().route(
+            "/admin",
+            m.get(() => jsonResponse({ ok: true })).layer(requireGroup("admin")),
+        );
+        const response = await testClient(router).get("/admin");
+        assert.equal(response.status, 401);
+    });
+
     it("returns 403 for users outside the group", async () => {
         const response = await testClient(adminRouter([])).get("/admin");
         assert.equal(response.status, 403);
