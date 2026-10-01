@@ -11,7 +11,6 @@ new ApiStack(app, "{{project.name}}-staging", {
     apiEnv: "staging",
     certificateArn: "{{stagingDomain.certificateArn}}",
     {%- if oauthProvider == "cognito" %}
-    // UserPoolArn output of the Cognito stack for this environment
     userPoolArn: "",
     {%- endif %}
     {%- if sentry %}
