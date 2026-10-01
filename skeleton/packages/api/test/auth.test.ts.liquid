@@ -1,0 +1,126 @@
+import assert from "node:assert/strict";
+import { createServer } from "node:http";
+import type { AddressInfo } from "node:net";
+import { after, before, describe, it, mock } from "node:test";
+import { jsonResponse } from "@taxum/core/http";
+import { m, Router } from "@taxum/core/routing";
+import { testClient } from "@taxum/testing";
+import { type AppConfig, appConfigHandler } from "@{{project.name}}/app-config";
+import { exportJWK, generateKeyPair, type JWTPayload, SignJWT } from "jose";
+import { router } from "../src/app.js";
+import { jwtLayer, jwtPayloadLayer, requireGroup } from "../src/util/auth.js";
+
+const issuer = "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_Test";
+const { privateKey, publicKey } = await generateKeyPair("RS256");
+
+// Serves the public key the way Cognito serves its JWKS.
+const jwksServer = createServer(async (_req, res) => {
+    const jwk = { ...(await exportJWK(publicKey)), kid: "test-key", alg: "RS256", use: "sig" };
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify({ keys: [jwk] }));
+});
+
+const accessToken = {
+    sub: "user-1",
+    token_use: "access",
+    client_id: "spa-client",
+    "cognito:groups": ["admin"],
+};
+
+type SignOptions = {
+    issuer?: string;
+    expiresAt?: number | null;
+    issuedAt?: number | null;
+};
+
+const sign = async (claims: JWTPayload, options: SignOptions = {}): Promise<string> => {
+    const now = Math.floor(Date.now() / 1000);
+    const jwt = new SignJWT(claims)
+        .setProtectedHeader({ alg: "RS256", kid: "test-key" })
+        .setIssuer(options.issuer ?? issuer);
+
+    if (options.issuedAt !== null) {
+        jwt.setIssuedAt(options.issuedAt ?? now);
+    }
+
+    if (options.expiresAt !== null) {
+        jwt.setExpirationTime(options.expiresAt ?? now + 300);
+    }
+
+    return jwt.sign(privateKey);
+};
+
+const adminRouter = new Router()
+    .route("/admin", m.get(() => jsonResponse({ ok: true })).layer(requireGroup("admin")))
+    .layer(jwtPayloadLayer)
+    .layer(jwtLayer);
+
+const get = async (target: Router, path: string, token: string): Promise<number> => {
+    const response = await testClient(target).get(path).header("Authorization", `Bearer ${token}`);
+    return response.status;
+};
+
+describe("auth", () => {
+    before(async () => {
+        await new Promise<void>((resolve) => jwksServer.listen(0, "127.0.0.1", resolve));
+        const { port } = jwksServer.address() as AddressInfo;
+        const config: AppConfig = {
+            jwt: {
+                issuer,
+                jwksUri: `http://127.0.0.1:${port}/.well-known/jwks.json`,
+                clientIds: ["spa-client"],
+            },
+        };
+        mock.method(appConfigHandler, "getConfigurationObject", () => ({ latestValue: config }));
+    });
+
+    after(() => {
+        mock.restoreAll();
+        jwksServer.closeAllConnections();
+        jwksServer.close();
+    });
+
+    it("accepts an access token from an allowed client", async () => {
+        assert.equal(await get(router, "/articles", await sign(accessToken)), 200);
+    });
+
+    it("rejects ID tokens", async () => {
+        const idToken = { sub: "user-1", token_use: "id", aud: "spa-client" };
+        assert.equal(await get(router, "/articles", await sign(idToken)), 401);
+    });
+
+    it("rejects tokens from other app clients", async () => {
+        const token = await sign({ ...accessToken, client_id: "other-client" });
+        assert.equal(await get(router, "/articles", token), 401);
+    });
+
+    it("rejects expired tokens", async () => {
+        const now = Math.floor(Date.now() / 1000);
+        const token = await sign(accessToken, { issuedAt: now - 600, expiresAt: now - 300 });
+        assert.equal(await get(router, "/articles", token), 401);
+    });
+
+    it("rejects tokens from another issuer", async () => {
+        const token = await sign(accessToken, { issuer: "https://example.com" });
+        assert.equal(await get(router, "/articles", token), 401);
+    });
+
+    it("rejects tokens without exp", async () => {
+        const token = await sign(accessToken, { expiresAt: null });
+        assert.equal(await get(router, "/articles", token), 401);
+    });
+
+    it("rejects tokens without iat", async () => {
+        const token = await sign(accessToken, { issuedAt: null });
+        assert.equal(await get(router, "/articles", token), 401);
+    });
+
+    it("lets group members through requireGroup", async () => {
+        assert.equal(await get(adminRouter, "/admin", await sign(accessToken)), 200);
+    });
+
+    it("returns 403 from requireGroup for users outside the group", async () => {
+        const { "cognito:groups": _, ...withoutGroups } = accessToken;
+        assert.equal(await get(adminRouter, "/admin", await sign(withoutGroups)), 403);
+    });
+});
