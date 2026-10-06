@@ -89,13 +89,21 @@ its file and its dependency `memize` from this project.
 
 ## Using Cognito instead of Auth0
 
-Fill `[jwt]` in `dev-app-config.toml` (copied from the `.dist`) and in AppConfig from the
-`create-cognito` stack outputs.
+The user pool lives in the React app's stack (`create-react-app` with Cognito). Fill `[jwt]` in
+`dev-app-config.toml` (copied from the `.dist`) and in AppConfig from that stack's outputs:
 
-Set `userPoolArn` in `packages/cdk/src/env-*.ts` to the `UserPoolArn` output. Synth fails while it
-is empty, malformed, or in another account or region than the stack. The API can then manage users
-in that pool (invite, disable, delete, reset password, manage groups) without a stored secret.
+| `[jwt]` key | Stack output |
+| --- | --- |
+| `issuer` | `CognitoIssuer` |
+| `jwksUri` | `CognitoIssuer` followed by `/.well-known/jwks.json` |
+| `clientIds` | `CognitoClientId` |
 
-Guard admin routes with `requireGroup("admin")` from `src/util/auth.ts`. Only access tokens from the
-listed clients are accepted; ID tokens get a 401.
+Set `userPoolArn` in `packages/cdk/src/env-*.ts` to the `CognitoUserPoolArn` output. Synth fails
+while it is empty, malformed, or in another account or region than the stack. The API can then
+manage users in that pool (invite, disable, delete, reset password, manage groups) without a stored
+secret.
+
+Guard admin routes with `requireGroup("admin")` from `src/util/auth.ts`. The React app only creates
+the `admin` group when its user admin UI is included; otherwise add the group in its stack. Only
+access tokens from the listed clients are accepted; ID tokens get a 401.
 {%- endif %}
