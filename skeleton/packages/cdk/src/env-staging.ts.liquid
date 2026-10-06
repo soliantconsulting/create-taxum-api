@@ -10,6 +10,10 @@ new ApiStack(app, "{{project.name}}-staging", {
     },
     apiEnv: "staging",
     certificateArn: "{{stagingDomain.certificateArn}}",
+    {%- if oauthProvider == "cognito" %}
+    // Lets the API manage users in the pool; see "Authentication (AWS Cognito)" in the README.
+    // userPoolArn: "<CognitoUserPoolArn output of the React app's stack>",
+    {%- endif %}
     {%- if sentry %}
     sentryDsn: "{{sentry.dsn}}",
     {%- endif %}

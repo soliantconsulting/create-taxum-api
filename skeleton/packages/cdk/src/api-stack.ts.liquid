@@ -2,6 +2,9 @@ import { fileURLToPath } from "node:url";
 import { Duration, Stack, type StackProps } from "aws-cdk-lib";
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { IpAddressType, SslPolicy } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+{%- if oauthProvider == "cognito" %}
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+{%- endif %}
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import {
     {%- if features contains "postgres" %}
@@ -30,10 +33,20 @@ import type { Construct } from "constructs";
 {%- if features contains "app-config" %}
 import { AppConfig } from "./app-config.js";
 {%- endif %}
+{%- if oauthProvider == "cognito" %}
+import { checkUserPoolArn } from "./user-pool-arn.js";
+{%- endif %}
 
 type ApiStackProps = StackProps & {
     apiEnv: string;
     certificateArn: string;
+    {%- if oauthProvider == "cognito" %}
+    /**
+     * Set to the `CognitoUserPoolArn` output of the React app's stack to let the API manage users in
+     * that pool. Leave it out when the API only verifies tokens.
+     */
+    userPoolArn?: string;
+    {%- endif %}
     {%- if sentry %}
     sentryDsn: string;
     {%- endif %}
@@ -42,6 +55,12 @@ type ApiStackProps = StackProps & {
 export class ApiStack extends Stack {
     public constructor(scope: Construct, id: string, props: ApiStackProps) {
         super(scope, id, props);
+        {%- if oauthProvider == "cognito" %}
+
+        if (props.userPoolArn) {
+            checkUserPoolArn(props.userPoolArn, props.env);
+        }
+        {%- endif %}
 
         const vpc = new Vpc(this, "Vpc", {
             ipProtocol: IpProtocol.DUAL_STACK,
@@ -179,6 +198,30 @@ export class ApiStack extends Stack {
         {%- endif %}
         {%- if features contains "app-config" %}
         appConfig.grantRead(albService.taskDefinition.taskRole);
+        {%- endif %}
+        {%- if oauthProvider == "cognito" %}
+
+        if (props.userPoolArn) {
+            albService.taskDefinition.taskRole.addToPrincipalPolicy(
+                new PolicyStatement({
+                    actions: [
+                        "cognito-idp:AdminCreateUser",
+                        "cognito-idp:AdminGetUser",
+                        "cognito-idp:AdminDisableUser",
+                        "cognito-idp:AdminEnableUser",
+                        "cognito-idp:AdminDeleteUser",
+                        "cognito-idp:AdminResetUserPassword",
+                        "cognito-idp:AdminAddUserToGroup",
+                        "cognito-idp:AdminRemoveUserFromGroup",
+                        "cognito-idp:AdminListGroupsForUser",
+                        "cognito-idp:ListUsers",
+                        "cognito-idp:ListGroups",
+                        "cognito-idp:ListUsersInGroup",
+                    ],
+                    resources: [props.userPoolArn],
+                }),
+            );
+        }
         {%- endif %}
 
         const serviceScaling = albService.service.autoScaleTaskCount({ maxCapacity: 10 });

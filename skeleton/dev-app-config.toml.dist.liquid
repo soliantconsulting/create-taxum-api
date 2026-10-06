@@ -1,0 +1,13 @@
+{%- if features contains "oauth2" -%}
+[jwt]
+{%- if oauthProvider == "cognito" %}
+# From the React app's stack outputs: CognitoIssuer and CognitoClientId.
+issuer = "https://cognito-idp.<region>.amazonaws.com/<user-pool-id>"
+jwksUri = "https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/jwks.json"
+clientIds = ["<spa-client-id>"]
+{%- else %}
+issuer = "https://<tenant>.auth0.com/"
+jwksUri = "https://<tenant>.auth0.com/.well-known/jwks.json"
+audience = "<api-identifier>"
+{%- endif %}
+{% endif -%}

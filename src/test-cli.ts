@@ -20,17 +20,20 @@ type BaseContext = ProjectContext &
     StagingDomainContext &
     SentryContext;
 
+const cognito = process.argv[2] === "cognito";
+const directory = cognito ? "test-synth-cognito" : "test-synth";
+
 await runPipeline({
     packageName: "@soliantconsulting/create-taxum-api",
     tasks: [createPnpmVersionTask("10.0.0"), synthTask],
     baseContext: {
         project: {
-            name: "test-synth",
+            name: directory,
             title: "Test Synth",
-            path: fileURLToPath(new URL("../test-synth", import.meta.url)),
+            path: fileURLToPath(new URL(`../${directory}`, import.meta.url)),
         },
         awsEnv: {
-            accountId: "123456789",
+            accountId: "123456789012",
             region: "us-east-1",
         },
         deployRole: {
@@ -40,7 +43,8 @@ await runPipeline({
             domainName: "test-synth.soliant-dev.io",
             certificateArn: "arn://example",
         },
-        features: ["postgres", "app-config", "oauth2"],
+        features: cognito ? ["app-config", "oauth2"] : ["postgres", "app-config", "oauth2"],
+        oauthProvider: cognito ? "cognito" : "auth0",
         sentry: {
             org: "soliant-consulting-inc",
             projectSlug: "test-synth",
