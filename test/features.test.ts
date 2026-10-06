@@ -14,13 +14,22 @@ describe("normalizeFeatures", () => {
 
 type FeaturesTaskWrapper = Parameters<typeof featuresTask.task>[1];
 
+type PromptOptions = {
+    message: string;
+};
+
+type FeaturesTaskRun = {
+    context: Partial<FeaturesContext>;
+    messages: string[];
+};
+
 // Answers the prompts in order and records which ones were asked.
-const runFeaturesTask = async (answers: unknown[]) => {
+const runFeaturesTask = async (answers: unknown[]): Promise<FeaturesTaskRun> => {
     const context: Partial<FeaturesContext> = {};
     const messages: string[] = [];
     const task = {
         prompt: () => ({
-            run: async ({ message }: { message: string }) => {
+            run: async ({ message }: PromptOptions) => {
                 messages.push(message);
                 return answers.shift();
             },
