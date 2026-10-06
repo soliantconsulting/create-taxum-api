@@ -85,7 +85,8 @@ describe("auth", () => {
     });
 
     it("rejects ID tokens", async () => {
-        const idToken = { sub: "user-1", token_use: "id", aud: "spa-client" };
+        // Differs from the accepted token in token_use only, so nothing else can explain the 401.
+        const idToken = { ...accessToken, token_use: "id" };
         assert.equal(await get(router, "/articles", await sign(idToken)), 401);
     });
 

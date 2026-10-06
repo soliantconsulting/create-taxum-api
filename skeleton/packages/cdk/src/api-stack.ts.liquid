@@ -38,7 +38,11 @@ type ApiStackProps = StackProps & {
     apiEnv: string;
     certificateArn: string;
     {%- if oauthProvider == "cognito" %}
-    userPoolArn: string;
+    /**
+     * Set to the `CognitoUserPoolArn` output of the React app's stack to let the API manage users in
+     * that pool. Leave it out when the API only verifies tokens.
+     */
+    userPoolArn?: string;
     {%- endif %}
     {%- if sentry %}
     sentryDsn: string;
@@ -51,16 +55,12 @@ const userPoolArnPattern =
     /^arn:aws[a-z-]*:cognito-idp:([a-z0-9-]+):(\d{12}):userpool\/[a-z0-9-]+_[A-Za-z0-9]+$/;
 
 const checkUserPoolArn = (userPoolArn: string, env: StackProps["env"]): void => {
-    if (!userPoolArn) {
-        throw new Error(
-            "userPoolArn is empty: copy UserPoolArn from the Cognito stack outputs into this env file",
-        );
-    }
-
     const match = userPoolArnPattern.exec(userPoolArn);
 
     if (!match) {
-        throw new Error(`userPoolArn is not a Cognito user pool ARN: ${userPoolArn}`);
+        throw new Error(
+            `userPoolArn is not a Cognito user pool ARN, copy CognitoUserPoolArn from the React app's stack outputs: ${userPoolArn}`,
+        );
     }
 
     const [, region, account] = match;
@@ -82,7 +82,9 @@ export class ApiStack extends Stack {
         super(scope, id, props);
         {%- if oauthProvider == "cognito" %}
 
-        checkUserPoolArn(props.userPoolArn, props.env);
+        if (props.userPoolArn) {
+            checkUserPoolArn(props.userPoolArn, props.env);
+        }
         {%- endif %}
 
         const vpc = new Vpc(this, "Vpc", {
@@ -223,25 +225,28 @@ export class ApiStack extends Stack {
         appConfig.grantRead(albService.taskDefinition.taskRole);
         {%- endif %}
         {%- if oauthProvider == "cognito" %}
-        albService.taskDefinition.taskRole.addToPrincipalPolicy(
-            new PolicyStatement({
-                actions: [
-                    "cognito-idp:AdminCreateUser",
-                    "cognito-idp:AdminGetUser",
-                    "cognito-idp:AdminDisableUser",
-                    "cognito-idp:AdminEnableUser",
-                    "cognito-idp:AdminDeleteUser",
-                    "cognito-idp:AdminResetUserPassword",
-                    "cognito-idp:AdminAddUserToGroup",
-                    "cognito-idp:AdminRemoveUserFromGroup",
-                    "cognito-idp:AdminListGroupsForUser",
-                    "cognito-idp:ListUsers",
-                    "cognito-idp:ListGroups",
-                    "cognito-idp:ListUsersInGroup",
-                ],
-                resources: [props.userPoolArn],
-            }),
-        );
+
+        if (props.userPoolArn) {
+            albService.taskDefinition.taskRole.addToPrincipalPolicy(
+                new PolicyStatement({
+                    actions: [
+                        "cognito-idp:AdminCreateUser",
+                        "cognito-idp:AdminGetUser",
+                        "cognito-idp:AdminDisableUser",
+                        "cognito-idp:AdminEnableUser",
+                        "cognito-idp:AdminDeleteUser",
+                        "cognito-idp:AdminResetUserPassword",
+                        "cognito-idp:AdminAddUserToGroup",
+                        "cognito-idp:AdminRemoveUserFromGroup",
+                        "cognito-idp:AdminListGroupsForUser",
+                        "cognito-idp:ListUsers",
+                        "cognito-idp:ListGroups",
+                        "cognito-idp:ListUsersInGroup",
+                    ],
+                    resources: [props.userPoolArn],
+                }),
+            );
+        }
         {%- endif %}
 
         const serviceScaling = albService.service.autoScaleTaskCount({ maxCapacity: 10 });

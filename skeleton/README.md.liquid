@@ -87,7 +87,7 @@ its file and its dependency `memize` from this project.
 {%- endif %}
 {%- if oauthProvider == "cognito" %}
 
-## Using Cognito instead of Auth0
+## Authentication (AWS Cognito)
 
 The user pool lives in the React app's stack (`create-react-app` with Cognito). Fill `[jwt]` in
 `dev-app-config.toml` (copied from the `.dist`) and in AppConfig from that stack's outputs:
@@ -98,12 +98,18 @@ The user pool lives in the React app's stack (`create-react-app` with Cognito). 
 | `jwksUri` | `CognitoIssuer` followed by `/.well-known/jwks.json` |
 | `clientIds` | `CognitoClientId` |
 
-Set `userPoolArn` in `packages/cdk/src/env-*.ts` to the `CognitoUserPoolArn` output. Synth fails
-while it is empty, malformed, or in another account or region than the stack. The API can then
-manage users in that pool (invite, disable, delete, reset password, manage groups) without a stored
-secret.
+Guard admin routes with `requireGroup("admin")` from `packages/api/src/util/auth.ts`. The React
+app's stack always creates the `admin` group. Only access tokens from the listed clients are
+accepted; ID tokens get a 401.
 
-Guard admin routes with `requireGroup("admin")` from `src/util/auth.ts`. The React app only creates
-the `admin` group when its user admin UI is included; otherwise add the group in its stack. Only
-access tokens from the listed clients are accepted; ID tokens get a 401.
+### Managing users from the API
+
+The API only verifies tokens by default and has no access to the user pool. If the React app
+includes its user admin UI, administrators manage users in the browser and the API needs none.
+
+To manage users from the API instead, set `userPoolArn` in `packages/cdk/src/env-*.ts` to the
+`CognitoUserPoolArn` output. Synth fails when it is malformed, or in another account or region than
+the stack. The task role can then invite, disable, delete and list users, reset passwords and change
+group membership in that pool, without a stored secret. That includes adding a user to `admin`, so
+treat the API as trusted with administrator rights once this is set.
 {%- endif %}
